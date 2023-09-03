@@ -1,0 +1,47 @@
+﻿<Window x:Class="TriviaClient.Room"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TriviaClient"
+        mc:Ignorable="d"
+        Title="Trivia - Room" Height="450" Width="800">
+    <Grid Background="LightBlue">
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <WrapPanel>
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <WrapPanel>
+                        <TextBlock Text="Room" FontSize="50" FontWeight="Bold"/>
+                    </WrapPanel>
+                    <Separator Opacity="0" Height="40" />
+                    <WrapPanel>
+                        <TextBlock Text="room name:" Width="330" FontSize="28"/>
+                        <TextBlock x:Name="RoomName" Width="120" FontSize="28"/>
+                    </WrapPanel>
+                    <Separator Opacity="0" Height="5" />
+                    <WrapPanel>
+                        <TextBlock Text="number of questions:" Width="330" FontSize="28"/>
+                        <TextBlock x:Name="QuestionCount" Width="120" FontSize="28"/>
+                    </WrapPanel>
+                    <Separator Opacity="0" Height="5" />
+                    <WrapPanel>
+                        <TextBlock Text="answer timeout (seconds):" Width="330" FontSize="28"/>
+                        <TextBlock x:Name="AnswerTimeout" Width="120" FontSize="28"/>
+                    </WrapPanel>
+                </StackPanel>
+
+                <StackPanel Background="LightGray">
+                    <TextBlock Text="Players List:" FontSize="28" FontWeight="Bold"/>
+                    <Separator Height="5"/>
+                    <StackPanel x:Name="PlayersList" Width="320"/>
+                </StackPanel>
+            </WrapPanel>
+            <Separator Opacity="0" Height="50" />
+            <WrapPanel HorizontalAlignment="Center">
+                <Button Content="Start Game" Click="StartGame" Width="150" FontSize="25" x:Name="StartGameButton"/>
+                <Separator Opacity="0" Width="80"/>
+                <Button Content="Leave Room" Click="LeaveRoom" Width="150" FontSize="25"/>
+            </WrapPanel>
+        </StackPanel>
+    </Grid>
+</Window>

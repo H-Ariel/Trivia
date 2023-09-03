@@ -11,8 +11,7 @@ int main()
 	try
 	{
 		WSAInitializer WSAInitializer;
-		TriviaServer server(9568);
-		server.run();
+		TriviaServer(9568).run();
 	}
 	catch (const Exception& e)
 	{

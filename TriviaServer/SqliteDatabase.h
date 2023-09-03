@@ -27,17 +27,14 @@ public:
 
 
 private:
-	sqlite3* db;
+	sqlite3* _db;
 
 	typedef int (*SQLite3Callback)(void*, int, char**, char**);
-
 
 	// Runs the inserted SQL statement.
 	// @param callback: Indicates a function that will process the output.
 	// @param dataToCallback: A parameter to be passed to the callback function.
 	void runSqlStatements(string sqlStatements, SQLite3Callback callback = nullptr, void* dataToCallback = nullptr);
-
-
 
 	/* Callback Functions: */
 

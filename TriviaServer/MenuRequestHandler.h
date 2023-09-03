@@ -12,8 +12,8 @@ public:
 	RequestResult handleRequest(const RequestInfo& reqInfo) override;
 
 private:
-	const LoggedUser user;
-	RoomsManager& roomsManager;
+	const LoggedUser _user;
+	RoomsManager& _roomsManager;
 	//StatisticsManager& statisticsManager; TODO
-	RequestHandlerFactory& handlerFactory;
+	RequestHandlerFactory& _handlerFactory;
 };

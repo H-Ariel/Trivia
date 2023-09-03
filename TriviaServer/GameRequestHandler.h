@@ -10,10 +10,9 @@ public:
 	GameRequestHandler(const LoggedUser& user, unsigned int gameId, RequestHandlerFactory& handlerFactory);
 	RequestResult handleRequest(const RequestInfo& reqInfo) override;
 
-
 private:
-	const LoggedUser user;
-	RequestHandlerFactory& handlerFactory;
-	GamesManager& gamesManager;
-	const unsigned int gameId;
+	const LoggedUser _user;
+	RequestHandlerFactory& _handlerFactory;
+	GamesManager& _gamesManager;
+	const unsigned int _gameId;
 };

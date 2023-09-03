@@ -11,7 +11,6 @@ public:
 	GamesManager(IDatabase* database);
 
 	void createGame(unsigned int roomId, vector<LoggedUser> users, unsigned int questionCount);
-	
 	void removePlayerFromGame(unsigned int gameId, const LoggedUser& user);
 	Question getQuestionForUser(unsigned int gameId, const LoggedUser& user);
 	bool hasMoreQuestions(unsigned int gameId, const LoggedUser& user) const;
@@ -23,6 +22,6 @@ private:
 	void deleteGame(unsigned int gameId);
 	void checkIfExists(unsigned int gameId) const;
 
-	IDatabase* const database;
-	map<unsigned int, shared_ptr<Game>> games; // [id]=game  (the game ID is same to the room ID)
+	IDatabase* const _database;
+	map<unsigned int, shared_ptr<Game>> _games; // [id]=game (the game ID is same to the room ID)
 };

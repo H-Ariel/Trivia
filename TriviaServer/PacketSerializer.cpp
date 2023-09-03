@@ -4,42 +4,36 @@
 using nlohmann::json;
 
 
-json JsonFromBuffer(const RequestInfo& reqInfo)
+inline json JsonFromBuffer(const RequestInfo& reqInfo)
 {
-	return json::parse(reqInfo.msgData);
+	return json::parse(string(reqInfo.msgData.begin(), reqInfo.msgData.end()));
 }
 
-Buffer BufferFromJson(const json& j, MessageCodes code = MessageCodes::OK)
+RequestInfo BufferFromJson(const json& j, MessageCodes code = MessageCodes::OK)
 {
 	const string data(j.dump());
-	const uint32_t dataLen = (uint32_t)data.length();
-	byte b_dataLen[sizeof(dataLen)] = {};
-	memcpy(b_dataLen, &dataLen, sizeof(dataLen));
 
-	Buffer buf;
-	buf.push_back((byte)code);
-	for (uint32_t i = 0; i < sizeof(dataLen); buf.push_back(b_dataLen[i++]));
-	for (const char& c : data) buf.push_back((byte)c);
+	RequestInfo reqInfo;
+	
+	reqInfo.msgCode = code;
+	reqInfo.msgData = Buffer(begin(data), end(data));
 
-	return buf;
+	return reqInfo;
 }
 
 
-Buffer ResponsePacketSerializer::serializeOkResponse()
+RequestInfo ResponsePacketSerializer::serializeOkResponse()
 {
-	Buffer buf;
-	buf.push_back(MessageCodes::OK);
-	for (uint32_t i = 0; i < sizeof(uint32_t); i++) buf.push_back(0);
-	return buf;
+	return BufferFromJson({});
 }
 
-Buffer ResponsePacketSerializer::serializeErrorResponse(const string& message)
+RequestInfo ResponsePacketSerializer::serializeErrorResponse(const string& message)
 {
-	return BufferFromJson({ {"message", message} }, MessageCodes::Error);
+	return BufferFromJson({ { "message", message } }, MessageCodes::Error);
 }
 
 
-Buffer ResponsePacketSerializer::serializeResponse(const GetRoomsResponse& resp)
+RequestInfo ResponsePacketSerializer::serializeResponse(const GetRoomsResponse& resp)
 {
 	vector<json> v;
 
@@ -54,12 +48,12 @@ Buffer ResponsePacketSerializer::serializeResponse(const GetRoomsResponse& resp)
 	return BufferFromJson({ { "rooms", v } });
 }
 
-Buffer ResponsePacketSerializer::serializeResponse(const GetStatisticsResponse& resp)
+RequestInfo ResponsePacketSerializer::serializeResponse(const GetStatisticsResponse& resp)
 {
 	return BufferFromJson({ { "statistics", resp.statistics } });
 }
 
-Buffer ResponsePacketSerializer::serializeResponse(const GetRoomStateResponse& resp)
+RequestInfo ResponsePacketSerializer::serializeResponse(const GetRoomStateResponse& resp)
 {
 	return BufferFromJson({
 		{ "answerTimeout", resp.answerTimeout },
@@ -68,18 +62,18 @@ Buffer ResponsePacketSerializer::serializeResponse(const GetRoomStateResponse& r
 		{ "name", resp.name },
 		{ "players", resp.players },
 		{ "questionCount", resp.questionCount },
-		});
+	});
 }
 
-Buffer ResponsePacketSerializer::serializeResponse(const GetQuestionResponse& resp)
+RequestInfo ResponsePacketSerializer::serializeResponse(const GetQuestionResponse& resp)
 {
 	return BufferFromJson({
 		{ "answers", resp.answers },
 		{ "question", resp.question }
-		});
+	});
 }
 
-Buffer ResponsePacketSerializer::serializeResponse(const GetGameResultsResponse& resp)
+RequestInfo ResponsePacketSerializer::serializeResponse(const GetGameResultsResponse& resp)
 {
 	vector<json> v;
 
@@ -90,7 +84,7 @@ Buffer ResponsePacketSerializer::serializeResponse(const GetGameResultsResponse&
 			{ "correctAnswerCount", i.correctAnswerCount },
 			{ "username", i.username },
 			{ "wrongAnswerCount", i.wrongAnswerCount }
-			});
+		});
 	}
 
 	return BufferFromJson({ { "results", v } });

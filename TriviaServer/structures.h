@@ -4,12 +4,23 @@
 #include <vector>
 #include <list>
 #include <tuple>
+#include <cstdint>
 
 using namespace std;
 
 
+using Buffer = vector<uint8_t>;
+
+struct RequestInfo // TODO: move to structures.h
+{
+	uint8_t msgCode;
+	Buffer msgData;
+};
+
 
 /* Data Struct-s */
+
+struct CreateRoomRequest;
 
 struct RoomData
 {
@@ -20,6 +31,7 @@ struct RoomData
 		unsigned int questionCount,
 		unsigned int answerTimeout
 	);
+	RoomData(const CreateRoomRequest&);
 
 	string name;
 	unsigned int id;

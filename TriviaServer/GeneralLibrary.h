@@ -33,16 +33,6 @@
 #define FIND_IN_ARRAY(arr, val) (find(begin(arr), end(arr), val) != end(arr))
 
 
-using namespace std;
-
-using Buffer = vector<byte>;
-
-struct RequestInfo // TODO: move to structures.h
-{
-	byte msgCode;
-	string msgData;
-};
-
 enum MessageCodes : uint8_t
 {
 	Error,
@@ -74,8 +64,8 @@ enum MessageCodes : uint8_t
 
 inline bool doesFileExist(string filename) // TODO: find better place
 {
-	struct stat buffer;
-	return (stat(filename.c_str(), &buffer) == 0);
+	struct stat s;
+	return (stat(filename.c_str(), &s) == 0);
 }
 
 // allocate new object as `shared_ptr`

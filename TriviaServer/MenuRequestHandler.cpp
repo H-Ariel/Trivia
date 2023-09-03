@@ -4,7 +4,7 @@
 
 
 MenuRequestHandler::MenuRequestHandler(const LoggedUser& user, RequestHandlerFactory& handlerFactory)
-    : user(user), handlerFactory(handlerFactory), roomsManager(handlerFactory.getRoomsManager())
+	: _user(user), _handlerFactory(handlerFactory), _roomsManager(handlerFactory.getRoomsManager())
 {
 }
 
@@ -14,34 +14,33 @@ RequestResult MenuRequestHandler::handleRequest(const RequestInfo& reqInfo)
 
 	switch (reqInfo.msgCode)
 	{
-	case MessageCodes::Logout: {
-		handlerFactory.getLoginManager().logout(user);
+	case MessageCodes::Logout:
+		_handlerFactory.getLoginManager().logout(_user);
 		result.response = ResponsePacketSerializer::serializeOkResponse();
 		result.newHandler = nullptr;
-	}	break;
+		break;
 
-	case MessageCodes::CreateRoom: {
-		CreateRoomRequest req = RequestPacketDeserializer::deserializeCreateRoomRequest(reqInfo);
-		unsigned int roomId = roomsManager.createRoom(user, RoomData(req.roomName, req.maxUsers, req.questionCount, req.answerTimeout));
+	case MessageCodes::CreateRoom:
+		result.newHandler = _handlerFactory.createRoomAdminRequestHandler(_user, _roomsManager.createRoom(_user,
+			RoomData(RequestPacketDeserializer::deserializeCreateRoomRequest(reqInfo))));
 		result.response = ResponsePacketSerializer::serializeOkResponse();
-		result.newHandler = handlerFactory.createRoomAdminRequestHandler(user, roomId);
-	}	break;
+		break;
 
-	case MessageCodes::GetRooms: {
-		result.response = ResponsePacketSerializer::serializeResponse(GetRoomsResponse(roomsManager.getRooms()));
+	case MessageCodes::GetRooms:
+		result.response = ResponsePacketSerializer::serializeResponse(GetRoomsResponse(_roomsManager.getRooms()));
 		result.changeHandler = false;
-	}	break;
+		break;
 
 	case MessageCodes::JoinRoom: {
 		JoinRoomRequest req = RequestPacketDeserializer::deserializeJoinRoomRequest(reqInfo);
-		roomsManager.addUserToRoom(user, req.roomId);
+		_roomsManager.addUserToRoom(_user, req.roomId);
 		result.response = ResponsePacketSerializer::serializeOkResponse();
-		result.newHandler = handlerFactory.createRoomMemberRequestHandler(user, req.roomId);
+		result.newHandler = _handlerFactory.createRoomMemberRequestHandler(_user, req.roomId);
 	}	break;
 
-	case MessageCodes::GetStatistics: {
+	case MessageCodes::GetStatistics:
 		throw Exception("not impleted");
-	}	break;
+		break;
 
 	default:
 		throw Exception("irrelevant request");

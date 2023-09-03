@@ -12,10 +12,9 @@ public:
 	const LoggedUser& login(SOCKET sock, string username, string password);
 	const LoggedUser& signup(SOCKET sock, string username, string password, string email);
 	void logout(const LoggedUser& user);
-
 	void disconnectSocket(SOCKET sock);
 
 private:
-	vector<LoggedUser> loggedUsers;
-	IDatabase* const database;
+	vector<LoggedUser> _loggedUsers;
+	IDatabase* const _database;
 };

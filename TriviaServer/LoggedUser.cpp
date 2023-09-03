@@ -2,21 +2,21 @@
 
 
 LoggedUser::LoggedUser(SOCKET sock, string username)
-	: username(username), sock(sock)
+	: _username(username), _sock(sock)
 {
 }
 
 bool LoggedUser::operator==(const LoggedUser& u) const
 {
-	return username == u.username;
+	return _username == u._username;
 }
 
 bool LoggedUser::operator==(SOCKET sock) const
 {
-	return this->sock == sock;
+	return _sock == sock;
 }
 
 bool LoggedUser::operator<(const LoggedUser& u) const
 {
-	return username < u.username;
+	return _username < u._username;
 }

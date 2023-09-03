@@ -3,12 +3,16 @@
 
 RoomData::RoomData()
 	: maxUsers(0), questionCount(0), answerTimeout(0), 
-	id(-1),  isActive(false), hasGameStarted(false)
+	id(-1), isActive(false), hasGameStarted(false)
 {
 }
 RoomData::RoomData(string name, unsigned int maxUsers, unsigned int questionCount, unsigned int answerTimeout)
 	: name(name), maxUsers(maxUsers), questionCount(questionCount),
 	answerTimeout(answerTimeout), id(-1), isActive(false), hasGameStarted(false)
+{
+}
+RoomData::RoomData(const CreateRoomRequest& req)
+	: RoomData(req.roomName, req.maxUsers, req.questionCount, req.answerTimeout)
 {
 }
 

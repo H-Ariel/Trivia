@@ -6,7 +6,7 @@
 
 
 RequestHandlerFactory::RequestHandlerFactory(IDatabase* database)
-	: loginManager(database), roomsManager(database), gamesManager(database)
+	: _loginManager(database), _roomsManager(database), _gamesManager(database)
 {
 }
 
@@ -33,19 +33,4 @@ shared_ptr<IRequestHandler> RequestHandlerFactory::createRoomAdminRequestHandler
 shared_ptr<IRequestHandler> RequestHandlerFactory::createGameRequestHandler(const LoggedUser& user, unsigned int gameId)
 {
 	return shared_ptr<IRequestHandler>(DBG_NEW GameRequestHandler(user, gameId, *this));
-}
-
-LoginManager& RequestHandlerFactory::getLoginManager()
-{
-	return loginManager;
-}
-
-RoomsManager& RequestHandlerFactory::getRoomsManager()
-{
-	return roomsManager;
-}
-
-GamesManager& RequestHandlerFactory::getGamesManager()
-{
-	return gamesManager;
 }

@@ -6,17 +6,14 @@
 class ResponsePacketSerializer
 {
 public:
-	static Buffer serializeOkResponse();
-	static Buffer serializeErrorResponse(const string& message);
+	static RequestInfo serializeOkResponse();
+	static RequestInfo serializeErrorResponse(const string& message);
 
-	static Buffer serializeResponse(const GetRoomsResponse&);
-	static Buffer serializeResponse(const GetStatisticsResponse&);
-
-	static Buffer serializeResponse(const GetRoomStateResponse&);
-
-	static Buffer serializeResponse(const GetQuestionResponse&);
-
-	static Buffer serializeResponse(const GetGameResultsResponse&);
+	static RequestInfo serializeResponse(const GetRoomsResponse&);
+	static RequestInfo serializeResponse(const GetStatisticsResponse&);
+	static RequestInfo serializeResponse(const GetRoomStateResponse&);
+	static RequestInfo serializeResponse(const GetQuestionResponse&);
+	static RequestInfo serializeResponse(const GetGameResultsResponse&);
 };
 
 

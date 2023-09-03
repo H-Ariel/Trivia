@@ -17,7 +17,6 @@ public:
 private:
 	void startHandleRequests();
 	void handleNewClient(SOCKET);
-
 	void getCommands();
 
 

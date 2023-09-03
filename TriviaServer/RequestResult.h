@@ -8,7 +8,7 @@ class IRequestHandler;
 
 struct RequestResult
 {
-	Buffer response;
+	RequestInfo response;
 	shared_ptr<IRequestHandler> newHandler;
 	bool changeHandler = true;
 };

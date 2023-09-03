@@ -14,10 +14,10 @@ public:
 protected:
 	RequestResult handleGetRoomState();
 
-	const LoggedUser user;
-	RoomsManager& roomsManager;
-	RequestHandlerFactory& handlerFactory;
-	const unsigned int roomId;
+	const LoggedUser _user;
+	RoomsManager& _roomsManager;
+	RequestHandlerFactory& _handlerFactory;
+	const unsigned int _roomId;
 };
 
 

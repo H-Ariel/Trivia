@@ -6,13 +6,13 @@
 
 
 SqliteDatabase::SqliteDatabase(string dbFilename)
-	: db(nullptr)
+	: _db(nullptr)
 {
 	bool fileExist = doesFileExist(dbFilename);
 
-	if (sqlite3_open(dbFilename.c_str(), &db) != SQLITE_OK)
+	if (sqlite3_open(dbFilename.c_str(), &_db) != SQLITE_OK)
 	{
-		db = nullptr;
+		_db = nullptr;
 		cout << "Failed to open DB" << endl;
 		return;
 	}
@@ -61,7 +61,7 @@ SqliteDatabase::SqliteDatabase(string dbFilename)
 }
 SqliteDatabase::~SqliteDatabase()
 {
-	sqlite3_close(db);
+	sqlite3_close(_db);
 }
 
 bool SqliteDatabase::doesUserExist(string username)
@@ -91,8 +91,7 @@ unsigned int SqliteDatabase::getMaxQuestionsCount() const
 vector<Question> SqliteDatabase::getQuestions(int n)
 {
 	vector<Question> questions;
-	string sqlStatements = "SELECT * FROM QUESTIONS WHERE question_id <= " + to_string(n) + ";";
-	runSqlStatements(sqlStatements, SqliteDatabase::GetQuestions, &questions);
+	runSqlStatements("SELECT * FROM QUESTIONS WHERE question_id <= " + to_string(n) + ";", SqliteDatabase::GetQuestions, &questions);
 	return questions;
 }
 
@@ -104,8 +103,7 @@ void SqliteDatabase::addQuestion(Question question)
 	for (const string& ans : question.wrongAnswers)
 		possibleAnswers += ",\"" + ans + '"';
 
-	string sqlStatements = "INSERT INTO QUESTIONS (question, correct_ans, ans2, ans3, ans4) VALUES (\"" + question.question + "\"," + possibleAnswers + ");";
-	runSqlStatements(sqlStatements);
+	runSqlStatements("INSERT INTO QUESTIONS (question, correct_ans, ans2, ans3, ans4) VALUES (\"" + question.question + "\"," + possibleAnswers + ");");
 }
 
 float SqliteDatabase::getPlayerAverageAnswerTime(string username)
@@ -132,10 +130,8 @@ int SqliteDatabase::getNumOfPlayerGames(string username)
 void SqliteDatabase::runSqlStatements(string sqlStatements, SQLite3Callback callback, void* dataToCallback)
 {
 	char* errMessage = nullptr;
-	if (sqlite3_exec(db, sqlStatements.c_str(), callback, dataToCallback, &errMessage) != SQLITE_OK)
-	{
+	if (sqlite3_exec(_db, sqlStatements.c_str(), callback, dataToCallback, &errMessage) != SQLITE_OK)
 		throw Exception("Error in " __FUNCTION__ ":\nsqlStatements = " + sqlStatements + "\nerrMessage = " + (errMessage ? errMessage : ""));
-	}
 }
 
 

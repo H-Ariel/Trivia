@@ -14,7 +14,6 @@ TriviaServer::~TriviaServer()
 {
 	delete _handlerFactory;
 	delete _database;
-
 }
 
 void TriviaServer::run()

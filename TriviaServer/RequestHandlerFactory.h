@@ -19,13 +19,13 @@ public:
 	shared_ptr<IRequestHandler> createRoomAdminRequestHandler(const LoggedUser& user, unsigned int roomId);
 	shared_ptr<IRequestHandler> createGameRequestHandler(const LoggedUser& user, unsigned int gameId); // the game ID is same to room ID
 
-	LoginManager& getLoginManager();
-	RoomsManager& getRoomsManager();
-	GamesManager& getGamesManager();
+	LoginManager& getLoginManager() { return _loginManager; }
+	RoomsManager& getRoomsManager() { return _roomsManager; }
+	GamesManager& getGamesManager() { return _gamesManager; }
 
 
 private:
-	LoginManager loginManager;
-	RoomsManager roomsManager;
-	GamesManager gamesManager;
+	LoginManager _loginManager;
+	RoomsManager _roomsManager;
+	GamesManager _gamesManager;
 };

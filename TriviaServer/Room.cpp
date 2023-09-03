@@ -2,58 +2,42 @@
 
 
 Room::Room(RoomData data)
-	: data(data)
+	: _data(data)
 {
 }
 
 void Room::addUser(const LoggedUser& user)
 {
-	if (FIND_IN_ARRAY(users, user)) throw Exception("user already in room");
-	if (users.size() >= data.maxUsers) throw Exception("This room is full");
-	users.push_back(user);
+	if (FIND_IN_ARRAY(_users, user))
+		throw Exception("user already in room");
+	if (_users.size() >= _data.maxUsers)
+		throw Exception("This room is full");
+	
+	_users.push_back(user);
 }
 
 void Room::removeUser(const LoggedUser& user)
 {
-	auto it = find(users.begin(), users.end(), user);
-	if (it == users.end())
+	auto it = find(_users.begin(), _users.end(), user);
+	if (it == _users.end())
 		throw Exception("user not in room");
-	users.erase(it);
+	_users.erase(it);
 }
 
 vector<string> Room::getUsernames() const
 {
-	vector<string> users_str;
-	for (auto& i : users)
-		users_str.push_back(i.getUsername());
-	return users_str;
-}
-const vector<LoggedUser>& Room::getUsers() const
-{
-	return users;
-}
-
-const RoomData& Room::getRoomData() const
-{
-	return data;
+	vector<string> usernames;
+	for (auto& i : _users)
+		usernames.push_back(i.getUsername());
+	return usernames;
 }
 
 void Room::close()
 {
-	data.isActive = false;
-}
-
-bool Room::isActive() const
-{
-	return data.isActive;
-}
-
-bool Room::isEmpty() const
-{
-	return users.empty();
+	_data.isActive = false;
 }
 
 void Room::startGame()
 {
-	data.hasGameStarted = true;
+	_data.hasGameStarted = true;
 }

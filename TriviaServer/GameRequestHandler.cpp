@@ -4,7 +4,7 @@
 
 
 GameRequestHandler::GameRequestHandler(const LoggedUser& user, unsigned int gameId, RequestHandlerFactory& handlerFactory)
-	: user(user), gameId(gameId), handlerFactory(handlerFactory), gamesManager(handlerFactory.getGamesManager())
+	: _user(user), _gameId(gameId), _handlerFactory(handlerFactory), _gamesManager(handlerFactory.getGamesManager())
 {
 }
 
@@ -14,30 +14,30 @@ RequestResult GameRequestHandler::handleRequest(const RequestInfo& reqInfo)
 
 	switch (reqInfo.msgCode)
 	{
-	case MessageCodes::GetQuestion: {
-		Question q = gamesManager.getQuestionForUser(gameId, user);
-		result.response = ResponsePacketSerializer::serializeResponse(GetQuestionResponse(q));
+	case MessageCodes::GetQuestion:
+		result.response = ResponsePacketSerializer::serializeResponse(
+			GetQuestionResponse(_gamesManager.getQuestionForUser(_gameId, _user)));
 		result.changeHandler = false;
-	}	break;
+		break;
 
-	case MessageCodes::SubmitAnswer: {
-		SubmitAnswerRequest req = RequestPacketDeserializer::deserializeSubmitAnswerRequest(reqInfo);
-		gamesManager.submitAnswer(gameId, user, req.answerId);
+	case MessageCodes::SubmitAnswer:
+		_gamesManager.submitAnswer(_gameId, _user,
+			RequestPacketDeserializer::deserializeSubmitAnswerRequest(reqInfo).answerId);
 		result.response = ResponsePacketSerializer::serializeOkResponse();
 		result.changeHandler = false;
-	}	break;
+		break;
 
-	case MessageCodes::GetGameResults: {
-		GetGameResultsResponse resp(gamesManager.getGameResults(gameId));
-		result.response = ResponsePacketSerializer::serializeResponse(resp);
+	case MessageCodes::GetGameResults:
+		result.response = ResponsePacketSerializer::serializeResponse(
+			GetGameResultsResponse(_gamesManager.getGameResults(_gameId)));
 		result.changeHandler = false;
-	}	break;
+		break;
 
-	case MessageCodes::LeaveGame: {
-		handlerFactory.getGamesManager().removePlayerFromGame(gameId, user);
+	case MessageCodes::LeaveGame:
+		_handlerFactory.getGamesManager().removePlayerFromGame(_gameId, _user);
 		result.response = ResponsePacketSerializer::serializeOkResponse();
-		result.newHandler = handlerFactory.createMenuRequestHandler(user);
-	}	break;
+		result.newHandler = _handlerFactory.createMenuRequestHandler(_user);
+		break;
 
 	default:
 		throw Exception("irrelevant request");

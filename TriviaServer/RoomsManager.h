@@ -10,7 +10,6 @@ class RoomsManager
 public:
 	RoomsManager(IDatabase* database);
 
-
 	unsigned int createRoom(const LoggedUser& admin, RoomData data); // create room and returns its ID
 	void closeRoom(int roomId);
 	void addUserToRoom(const LoggedUser& user, unsigned int roomId);
@@ -26,6 +25,6 @@ private:
 	void deleteRoom(int id);
 	void checkIfExists(unsigned int roomId) const;
 
-	map<unsigned int, Room> rooms;
-	IDatabase* const database;
+	map<unsigned int, Room> _rooms;
+	IDatabase* const _database;
 };

@@ -5,7 +5,7 @@
 #define DEFAULT_QUESTIONS_COUNT 10
 
 
-SqliteDatabase::SqliteDatabase(string dbFilename)
+SqliteDatabase::SqliteDatabase(const string& dbFilename)
 	: _db(nullptr)
 {
 	bool fileExist = doesFileExist(dbFilename);
@@ -22,7 +22,7 @@ SqliteDatabase::SqliteDatabase(string dbFilename)
 	{
 		// SQL statements to create the database
 		const char* INIT_SQL_STATMENTS[] = {
-			"CREATE TABLE USERS (NAME TEXT PRIMARY KEY NOT NULL, PASSWORD TEXT NOT NULL, EMAIL TEXT NOT NULL);",
+			"CREATE TABLE USERS (name TEXT PRIMARY KEY NOT NULL, password TEXT NOT NULL, email TEXT NOT NULL);",
 			"CREATE TABLE QUESTIONS(question_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, question TEXT NOT NULL, correct_ans TEXT NOT NULL, ans2 TEXT NOT NULL, ans3 TEXT NOT NULL, ans4 TEXT NOT NULL);"
 		};
 		
@@ -64,38 +64,40 @@ SqliteDatabase::~SqliteDatabase()
 	sqlite3_close(_db);
 }
 
-bool SqliteDatabase::doesUserExist(string username)
+bool SqliteDatabase::doesUserExist(const string& username)
 {
 	bool exist = false;
-	runSqlStatements("SELECT * FROM USERS WHERE NAME=\"" + username + "\";", SqliteDatabase::HasArgs, &exist);
+	runSqlStatements("SELECT * FROM USERS WHERE name=\"" + username + "\";", SqliteDatabase::HasArgs, &exist);
 	return exist;
 }
 
-bool SqliteDatabase::doesPasswordMatch(string username, string password)
+bool SqliteDatabase::doesPasswordMatch(const string& username, const string& password)
 {
 	bool exist = false;
-	runSqlStatements("SELECT * FROM USERS WHERE NAME=\"" + username + "\" AND PASSWORD=\"" + password + "\";", SqliteDatabase::HasArgs, &exist);
+	runSqlStatements("SELECT * FROM USERS WHERE name=\"" + username + "\" AND password=\"" + password + "\";", SqliteDatabase::HasArgs, &exist);
 	return exist;
 }
 
-void SqliteDatabase::addNewUser(string username, string password, string email)
+void SqliteDatabase::addNewUser(const string& username, const string& password, const string& email)
 {
 	runSqlStatements("INSERT INTO USERS VALUES(\"" + username + "\", \"" + password + "\", \"" + email + "\");");
 }
 
-unsigned int SqliteDatabase::getMaxQuestionsCount() const
+unsigned int SqliteDatabase::getMaxQuestionsCount()
 {
-	return DEFAULT_QUESTIONS_COUNT;
+	unsigned int count = 0;
+	runSqlStatements("SELECT COUNT(*) FROM QUESTIONS;", SqliteDatabase::GetInt, &count);
+	return count;
 }
 
-vector<Question> SqliteDatabase::getQuestions(int n)
+vector<Question> SqliteDatabase::getQuestions(unsigned int n)
 {
 	vector<Question> questions;
 	runSqlStatements("SELECT * FROM QUESTIONS WHERE question_id <= " + to_string(n) + ";", SqliteDatabase::GetQuestions, &questions);
 	return questions;
 }
 
-void SqliteDatabase::addQuestion(Question question)
+void SqliteDatabase::addQuestion(const Question& question)
 {
 	string possibleAnswers;
 
@@ -106,28 +108,28 @@ void SqliteDatabase::addQuestion(Question question)
 	runSqlStatements("INSERT INTO QUESTIONS (question, correct_ans, ans2, ans3, ans4) VALUES (\"" + question.question + "\"," + possibleAnswers + ");");
 }
 
-float SqliteDatabase::getPlayerAverageAnswerTime(string username)
+float SqliteDatabase::getPlayerAverageAnswerTime(const string& username)
 {
 	throw Exception(__FUNCTION__ " DOES NOT IMPLETED");
 }
 
-int SqliteDatabase::getNumOfCorrectAnswers(string username)
+int SqliteDatabase::getNumOfCorrectAnswers(const string& username)
 {
 	throw Exception(__FUNCTION__ " DOES NOT IMPLETED");
 }
 
-int SqliteDatabase::getNumOfTotalAnswers(string username)
+int SqliteDatabase::getNumOfTotalAnswers(const string& username)
 {
 	throw Exception(__FUNCTION__ " DOES NOT IMPLETED");
 }
 
-int SqliteDatabase::getNumOfPlayerGames(string username)
+int SqliteDatabase::getNumOfPlayerGames(const string& username)
 {
 	throw Exception(__FUNCTION__ " DOES NOT IMPLETED");
 }
 
 
-void SqliteDatabase::runSqlStatements(string sqlStatements, SQLite3Callback callback, void* dataToCallback)
+void SqliteDatabase::runSqlStatements(const string& sqlStatements, SQLite3Callback callback, void* dataToCallback)
 {
 	char* errMessage = nullptr;
 	if (sqlite3_exec(_db, sqlStatements.c_str(), callback, dataToCallback, &errMessage) != SQLITE_OK)
@@ -155,5 +157,11 @@ int SqliteDatabase::GetQuestions(void* data, int argc, char** argv, char** azCol
 		else if (colName == "correct_ans") temp.correctAnswer = argv[i];
 	}
 	((vector<Question>*)data)->push_back(temp);
+	return 0;
+}
+int SqliteDatabase::GetInt(void* data, int argc, char** argv, char** azColName)
+{
+	if (argc == 1)
+		*((unsigned int*)data) = stoi(argv[0]);
 	return 0;
 }

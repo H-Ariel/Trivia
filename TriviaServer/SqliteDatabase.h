@@ -9,21 +9,21 @@ struct sqlite3;
 class SqliteDatabase : public IDatabase
 {
 public:
-	SqliteDatabase(string dbFilename);
+	SqliteDatabase(const string& dbFilename);
 	~SqliteDatabase();
 
-	bool doesUserExist(string username) override;
-	bool doesPasswordMatch(string username, string password) override;
-	void addNewUser(string username, string password, string email) override;
+	bool doesUserExist(const string& username) override;
+	bool doesPasswordMatch(const string& username, const string& password) override;
+	void addNewUser(const string& username, const string& password, const string& email) override;
 
-	unsigned int getMaxQuestionsCount() const override;
-	vector<Question> getQuestions(int n) override;
-	void addQuestion(Question question) override;
+	unsigned int getMaxQuestionsCount() override;
+	vector<Question> getQuestions(unsigned int n) override;
+	void addQuestion(const Question& question) override;
 
-	float getPlayerAverageAnswerTime(string username) override;
-	int getNumOfCorrectAnswers(string username) override;
-	int getNumOfTotalAnswers(string username) override;
-	int getNumOfPlayerGames(string username) override;
+	float getPlayerAverageAnswerTime(const string& username) override;
+	int getNumOfCorrectAnswers(const string& username) override;
+	int getNumOfTotalAnswers(const string& username) override;
+	int getNumOfPlayerGames(const string& username) override;
 
 
 private:
@@ -34,10 +34,11 @@ private:
 	// Runs the inserted SQL statement.
 	// @param callback: Indicates a function that will process the output.
 	// @param dataToCallback: A parameter to be passed to the callback function.
-	void runSqlStatements(string sqlStatements, SQLite3Callback callback = nullptr, void* dataToCallback = nullptr);
+	void runSqlStatements(const string& sqlStatements, SQLite3Callback callback = nullptr, void* dataToCallback = nullptr);
 
 	/* Callback Functions: */
 
 	static int HasArgs(void* data, int argc, char** argv, char** azColName);
 	static int GetQuestions(void* data, int argc, char** argv, char** azColName);
+	static int GetInt(void* data, int argc, char** argv, char** azColName);
 };

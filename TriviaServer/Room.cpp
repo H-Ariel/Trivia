@@ -1,7 +1,7 @@
 #include "Room.h"
 
 
-Room::Room(RoomData data)
+Room::Room(const RoomData& data)
 	: _data(data)
 {
 }

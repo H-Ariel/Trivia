@@ -22,8 +22,9 @@ unsigned int RoomsManager::createRoom(const LoggedUser& admin, RoomData data)
 	if (!data.questionCount)
 		throw Exception("the number of question must be a positive number");
 
-	if (data.questionCount > _database->getMaxQuestionsCount())
-		data.questionCount = _database->getMaxQuestionsCount();
+	unsigned int maxQuestionsCount = _database->getMaxQuestionsCount();
+	if (data.questionCount > maxQuestionsCount)
+		data.questionCount = maxQuestionsCount;
 
 	data.id = getRoomId();
 	data.hasGameStarted = false;

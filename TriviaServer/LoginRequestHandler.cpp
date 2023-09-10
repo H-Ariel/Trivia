@@ -3,8 +3,8 @@
 #include "MenuRequestHandler.h"
 
 
-LoginRequestHandler::LoginRequestHandler(RequestHandlerFactory& handlerFactory, SOCKET sock)
-	: _handlerFactory(handlerFactory), _loginManager(handlerFactory.getLoginManager()), _sock(sock)
+LoginRequestHandler::LoginRequestHandler(RequestHandlerFactory& handlerFactory, int id)
+	: _handlerFactory(handlerFactory), _loginManager(handlerFactory.getLoginManager()), _id(id)
 {
 }
 
@@ -16,13 +16,13 @@ RequestResult LoginRequestHandler::handleRequest(const RequestInfo& reqInfo)
 	{
 	case MessageCodes::Login: {
 		LoginRequest req = RequestPacketDeserializer::deserializeLoginRequest(reqInfo);
-		result.newHandler = _handlerFactory.createMenuRequestHandler(_loginManager.login(_sock, req.username, req.password));
+		result.newHandler = _handlerFactory.createMenuRequestHandler(_loginManager.login(_id, req.username, req.password));
 		result.response = ResponsePacketSerializer::serializeOkResponse();
 	}	break;
 
 	case MessageCodes::Signup: {
 		SignupRequest req = RequestPacketDeserializer::deserializeSignupRequest(reqInfo);
-		result.newHandler = _handlerFactory.createMenuRequestHandler(_loginManager.signup(_sock, req.username, req.password, req.email));
+		result.newHandler = _handlerFactory.createMenuRequestHandler(_loginManager.signup(_id, req.username, req.password, req.email));
 		result.response = ResponsePacketSerializer::serializeOkResponse();
 	}	break;
 

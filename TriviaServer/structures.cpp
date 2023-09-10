@@ -1,6 +1,9 @@
 #include "structures.h"
 
 
+// TODO: organize file according to .h
+
+
 RoomData::RoomData()
 	: maxUsers(0), questionCount(0), answerTimeout(0), 
 	id(-1), isActive(false), hasGameStarted(false)
@@ -16,6 +19,16 @@ RoomData::RoomData(const CreateRoomRequest& req)
 {
 }
 
+UserStatistics::UserStatistics()
+	: score(0)
+{
+}
+void UserStatistics::calcScore(unsigned int gameCount, float averangeAnswerTime, unsigned int correctAnswersCount, unsigned int totalAnswersCount)
+{
+	score = averangeAnswerTime * gameCount * correctAnswersCount / totalAnswersCount;
+}
+
+
 PlayerGameData::PlayerGameData()
 	: currentQuestionId(0), correctAnswerCount(0), wrongAnswerCount(0), 
 	averangeAnswerTime(0), isActive(true)
@@ -26,7 +39,6 @@ Question::Question(string question, string correctAnswer, vector<string> wrongAn
 	: question(question), correctAnswer(correctAnswer), wrongAnswers(wrongAnswers)
 {
 }
-
 
 GetRoomsResponse::GetRoomsResponse(vector<tuple<unsigned int, string>> rooms)
 	: rooms(rooms)
@@ -46,9 +58,14 @@ GetGameResultsResponse::GetGameResultsResponse(vector<PlayerResults> results)
 {
 }
 
-GetRoomStateResponse::GetRoomStateResponse(RoomData roomData)
+GetRoomStateResponse::GetRoomStateResponse(const RoomData& roomData)
 	: name(roomData.name), answerTimeout(roomData.answerTimeout),
 	hasGameStarted(roomData.hasGameStarted), isActive(roomData.isActive),
 	questionCount(roomData.questionCount)
+{
+}
+
+GetStatisticsResponse::GetStatisticsResponse(vector<UserStatistics> highScore, UserStatistics userStat)
+	: highScore(highScore), userStat(userStat)
 {
 }

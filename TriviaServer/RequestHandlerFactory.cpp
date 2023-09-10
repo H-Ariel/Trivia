@@ -6,13 +6,13 @@
 
 
 RequestHandlerFactory::RequestHandlerFactory(IDatabase* database)
-	: _loginManager(database), _roomsManager(database), _gamesManager(database)
+	: _loginManager(database), _statisticsManager(database), _roomsManager(database), _gamesManager(database)
 {
 }
 
-shared_ptr<IRequestHandler> RequestHandlerFactory::createLoginRequestHandler(SOCKET sock)
+shared_ptr<IRequestHandler> RequestHandlerFactory::createLoginRequestHandler(int id)
 {
-	return shared_ptr<IRequestHandler>(DBG_NEW LoginRequestHandler(*this, sock));
+	return shared_ptr<IRequestHandler>(DBG_NEW LoginRequestHandler(*this, id));
 }
 
 shared_ptr<IRequestHandler> RequestHandlerFactory::createMenuRequestHandler(const LoggedUser& user)

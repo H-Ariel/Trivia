@@ -6,9 +6,9 @@ LoginManager::LoginManager(IDatabase* database)
 {
 }
 
-const LoggedUser& LoginManager::login(SOCKET sock, string username, string password)
+const LoggedUser& LoginManager::login(int id, string username, string password)
 {
-	LoggedUser newUser(sock, username);
+	LoggedUser newUser(id, username);
 
 	if (!_database->doesUserExist(username))
 		throw Exception("username does not exists");
@@ -21,13 +21,13 @@ const LoggedUser& LoginManager::login(SOCKET sock, string username, string passw
 	return _loggedUsers.back();
 }
 
-const LoggedUser& LoginManager::signup(SOCKET sock, string username, string password, string email)
+const LoggedUser& LoginManager::signup(int id, string username, string password, string email)
 {
 	if (_database->doesUserExist(username))
 		throw Exception("username already exists");
 
 	_database->addNewUser(username, password, email);
-	return login(sock, username, password);
+	return login(id, username, password);
 }
 
 void LoginManager::logout(const LoggedUser& user)
@@ -37,9 +37,9 @@ void LoginManager::logout(const LoggedUser& user)
 		_loggedUsers.erase(it);
 }
 
-void LoginManager::disconnectSocket(SOCKET sock)
+void LoginManager::disconnectUser(int id)
 {
-	auto it = find(_loggedUsers.begin(), _loggedUsers.end(), sock);
+	auto it = find(_loggedUsers.begin(), _loggedUsers.end(), id);
 	if (it != _loggedUsers.end())
 		_loggedUsers.erase(it);
 }

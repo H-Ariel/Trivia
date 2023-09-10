@@ -71,6 +71,9 @@
     <ClCompile Include="sqlite3.c">
       <Filter>third party</Filter>
     </ClCompile>
+    <ClCompile Include="StatisticsManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Communicator.h">
@@ -144,6 +147,9 @@
     </ClInclude>
     <ClInclude Include="sqlite3.h">
       <Filter>third party</Filter>
+    </ClInclude>
+    <ClInclude Include="StatisticsManager.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -4,7 +4,7 @@
 
 
 MenuRequestHandler::MenuRequestHandler(const LoggedUser& user, RequestHandlerFactory& handlerFactory)
-	: _user(user), _handlerFactory(handlerFactory), _roomsManager(handlerFactory.getRoomsManager())
+	: _user(user), _handlerFactory(handlerFactory), _roomsManager(handlerFactory.getRoomsManager()), _statisticsManager(handlerFactory.getStatisticsManager())
 {
 }
 
@@ -38,9 +38,13 @@ RequestResult MenuRequestHandler::handleRequest(const RequestInfo& reqInfo)
 		result.newHandler = _handlerFactory.createRoomMemberRequestHandler(_user, req.roomId);
 	}	break;
 
-	case MessageCodes::GetStatistics:
-		throw Exception("not impleted");
-		break;
+	case MessageCodes::GetStatistics: {
+	//	throw Exception("not impleted");
+		result.response = ResponsePacketSerializer::serializeResponse(
+			GetStatisticsResponse(_statisticsManager.getHighScore(), _statisticsManager.getUserStatistics(_user.getUsername()))
+		);
+		result.changeHandler = false;
+	}	break;
 
 	default:
 		throw Exception("irrelevant request");

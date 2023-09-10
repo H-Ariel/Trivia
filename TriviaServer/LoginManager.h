@@ -9,10 +9,10 @@ class LoginManager
 public:
 	LoginManager(IDatabase* database);
 
-	const LoggedUser& login(SOCKET sock, string username, string password);
-	const LoggedUser& signup(SOCKET sock, string username, string password, string email);
+	const LoggedUser& login(int id, string username, string password);
+	const LoggedUser& signup(int id, string username, string password, string email);
 	void logout(const LoggedUser& user);
-	void disconnectSocket(SOCKET sock);
+	void disconnectUser(int id);
 
 private:
 	vector<LoggedUser> _loggedUsers;

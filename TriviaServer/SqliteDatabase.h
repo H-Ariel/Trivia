@@ -20,10 +20,9 @@ public:
 	vector<Question> getQuestions(unsigned int n) override;
 	void addQuestion(const Question& question) override;
 
-	float getPlayerAverageAnswerTime(const string& username) override;
-	int getNumOfCorrectAnswers(const string& username) override;
-	int getNumOfTotalAnswers(const string& username) override;
-	int getNumOfPlayerGames(const string& username) override;
+	void addStatistics(const string& username, unsigned int gameId, float averangeAnswerTime, unsigned int correctAnswersCount, unsigned int totalAnswersCount) override;
+	UserStatistics getUserStatistics(const string& username) override;
+	vector<UserStatistics> getHighScore(int n) override;
 
 
 private:

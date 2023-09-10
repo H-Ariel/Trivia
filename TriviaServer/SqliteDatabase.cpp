@@ -22,8 +22,9 @@ SqliteDatabase::SqliteDatabase(const string& dbFilename)
 	{
 		// SQL statements to create the database
 		const char* INIT_SQL_STATMENTS[] = {
-			"CREATE TABLE USERS (name TEXT PRIMARY KEY NOT NULL, password TEXT NOT NULL, email TEXT NOT NULL);",
+			"CREATE TABLE USERS (username TEXT PRIMARY KEY NOT NULL, password TEXT NOT NULL, email TEXT NOT NULL);",
 			"CREATE TABLE QUESTIONS(question_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, question TEXT NOT NULL, correct_ans TEXT NOT NULL, ans2 TEXT NOT NULL, ans3 TEXT NOT NULL, ans4 TEXT NOT NULL);"
+			"CREATE TABLE STATISTICS(game_id INTEGER NOT NULL, username TEXT NOT NULL, averange_answer_time REAL NOT NULL, correct_answers_count INTEGER NOT NULL, total_answers_count INTEGER NOT NULL);"
 		};
 		
 		const Question DEFAULT_QUESTIONS[DEFAULT_QUESTIONS_COUNT] = {
@@ -67,20 +68,20 @@ SqliteDatabase::~SqliteDatabase()
 bool SqliteDatabase::doesUserExist(const string& username)
 {
 	bool exist = false;
-	runSqlStatements("SELECT * FROM USERS WHERE name=\"" + username + "\";", SqliteDatabase::HasArgs, &exist);
+	runSqlStatements("SELECT * FROM USERS WHERE username=\"" + username + "\";", SqliteDatabase::HasArgs, &exist);
 	return exist;
 }
 
 bool SqliteDatabase::doesPasswordMatch(const string& username, const string& password)
 {
 	bool exist = false;
-	runSqlStatements("SELECT * FROM USERS WHERE name=\"" + username + "\" AND password=\"" + password + "\";", SqliteDatabase::HasArgs, &exist);
+	runSqlStatements("SELECT * FROM USERS WHERE username=\"" + username + "\" AND password=\"" + password + "\";", SqliteDatabase::HasArgs, &exist);
 	return exist;
 }
 
 void SqliteDatabase::addNewUser(const string& username, const string& password, const string& email)
 {
-	runSqlStatements("INSERT INTO USERS VALUES(\"" + username + "\", \"" + password + "\", \"" + email + "\");");
+	runSqlStatements("INSERT INTO USERS VALUES(\"" + username + "\",\"" + password + "\",\"" + email + "\");");
 }
 
 unsigned int SqliteDatabase::getMaxQuestionsCount()
@@ -108,22 +109,20 @@ void SqliteDatabase::addQuestion(const Question& question)
 	runSqlStatements("INSERT INTO QUESTIONS (question, correct_ans, ans2, ans3, ans4) VALUES (\"" + question.question + "\"," + possibleAnswers + ");");
 }
 
-float SqliteDatabase::getPlayerAverageAnswerTime(const string& username)
+void SqliteDatabase::addStatistics(const string& username, unsigned int gameId, float averangeAnswerTime, unsigned int correctAnswersCount, unsigned int totalAnswersCount)
+{
+	char str[256] = {};
+	sprintf(str, "INSERT INTO STATISTICS VALUES(%d, \"%s\", %f, %d, %d);", gameId,
+		username.c_str(), averangeAnswerTime, correctAnswersCount, totalAnswersCount);
+	runSqlStatements(str);
+}
+
+UserStatistics SqliteDatabase::getUserStatistics(const string& username)
 {
 	throw Exception(__FUNCTION__ " DOES NOT IMPLETED");
 }
 
-int SqliteDatabase::getNumOfCorrectAnswers(const string& username)
-{
-	throw Exception(__FUNCTION__ " DOES NOT IMPLETED");
-}
-
-int SqliteDatabase::getNumOfTotalAnswers(const string& username)
-{
-	throw Exception(__FUNCTION__ " DOES NOT IMPLETED");
-}
-
-int SqliteDatabase::getNumOfPlayerGames(const string& username)
+vector<UserStatistics> SqliteDatabase::getHighScore(int n)
 {
 	throw Exception(__FUNCTION__ " DOES NOT IMPLETED");
 }

@@ -7,12 +7,12 @@
 class LoginRequestHandler : public IRequestHandler
 {
 public:
-	LoginRequestHandler(RequestHandlerFactory& handlerFactory, SOCKET sock);
+	LoginRequestHandler(RequestHandlerFactory& handlerFactory, int id);
 
 	RequestResult handleRequest(const RequestInfo& reqInfo) override;
 	
 private:
 	LoginManager& _loginManager;
 	RequestHandlerFactory& _handlerFactory;
-	SOCKET _sock;
+	int _id;
 };

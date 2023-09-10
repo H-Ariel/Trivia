@@ -11,7 +11,7 @@ using namespace std;
 
 using Buffer = vector<uint8_t>;
 
-struct RequestInfo // TODO: move to structures.h
+struct RequestInfo
 {
 	uint8_t msgCode;
 	Buffer msgData;
@@ -45,12 +45,22 @@ struct RoomData
 
 struct Question
 {
-	Question() = default;
+	Question() = default; // TODO
 	Question(string question, string correctAnswer, vector<string> wrongAnswers);
 
 	string question;
 	string correctAnswer;
 	vector<string> wrongAnswers;
+};
+
+struct UserStatistics
+{
+	UserStatistics();
+
+	void calcScore(unsigned int gameCount, float averangeAnswerTime, unsigned int correctAnswersCount, unsigned int totalAnswersCount);
+
+	string username;
+	float score;
 };
 
 struct PlayerGameData
@@ -88,18 +98,18 @@ struct GetRoomsResponse
 	vector<tuple<unsigned int, string>> rooms;
 };
 
-struct GetHighScoreResponse
-{
-	vector<string> statistics;
-};
 struct GetStatisticsResponse
 {
-	vector<string> statistics;
+	GetStatisticsResponse(vector<UserStatistics> highScore, UserStatistics userStat);
+	
+	vector<UserStatistics> highScore;
+	UserStatistics userStat;
 };
 
 struct GetRoomStateResponse
 {
-	GetRoomStateResponse(RoomData roomData);
+	GetRoomStateResponse(const RoomData& roomData);
+
 	string name;
 	vector<string> players;
 	unsigned int questionCount;

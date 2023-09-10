@@ -44,7 +44,7 @@ void TriviaServer::handleNewClient(SOCKET clientSock)
 
 	RequestInfo reqInfo;
 	RequestResult result;
-	shared_ptr<IRequestHandler> handler = _handlerFactory->createLoginRequestHandler(clientSock);
+	shared_ptr<IRequestHandler> handler = _handlerFactory->createLoginRequestHandler((int)clientSock);
 	bool handleClient = true;
 
 	try
@@ -81,7 +81,7 @@ void TriviaServer::handleNewClient(SOCKET clientSock)
 	catch (const Exception& e)
 	{
 		cout << "error in sock " << clientSock << ": " << e.what() << endl;
-		_handlerFactory->getLoginManager().disconnectSocket(clientSock);
+		_handlerFactory->getLoginManager().disconnectUser((int)clientSock);
 	}
 
 	closesocket(clientSock);

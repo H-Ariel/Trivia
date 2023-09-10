@@ -1,8 +1,8 @@
 #include "LoggedUser.h"
 
 
-LoggedUser::LoggedUser(SOCKET sock, string username)
-	: _username(username), _sock(sock)
+LoggedUser::LoggedUser(int id, string username)
+	: _username(username), _id(id)
 {
 }
 
@@ -11,9 +11,9 @@ bool LoggedUser::operator==(const LoggedUser& u) const
 	return _username == u._username;
 }
 
-bool LoggedUser::operator==(SOCKET sock) const
+bool LoggedUser::operator==(int id) const
 {
-	return _sock == sock;
+	return _id == id;
 }
 
 bool LoggedUser::operator<(const LoggedUser& u) const

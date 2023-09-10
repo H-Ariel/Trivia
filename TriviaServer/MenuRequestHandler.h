@@ -14,6 +14,6 @@ public:
 private:
 	const LoggedUser _user;
 	RoomsManager& _roomsManager;
-	//StatisticsManager& statisticsManager; TODO
+	StatisticsManager& _statisticsManager;
 	RequestHandlerFactory& _handlerFactory;
 };

@@ -6,16 +6,16 @@
 class LoggedUser
 {
 public:
-	LoggedUser(SOCKET sock, string username);
+	LoggedUser(int id, string username);
 
 	string getUsername() const { return _username; }
-	SOCKET getSocket() const { return _sock; }
+	SOCKET getSocket() const { return _id; }
 
 	bool operator==(const LoggedUser&) const;
-	bool operator==(SOCKET) const;
+	bool operator==(int id) const;
 	bool operator<(const LoggedUser&) const;
 
 private:
 	string _username;
-	SOCKET _sock; // this is kind of an id for logged user
+	int _id; // this is an id for logged user
 };

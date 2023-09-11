@@ -10,7 +10,7 @@ class GamesManager
 public:
 	GamesManager(IDatabase* database);
 
-	void createGame(unsigned int roomId, vector<LoggedUser> users, unsigned int questionCount);
+	void createGame(const RoomData& roomData, const vector<LoggedUser>& users);
 	void removePlayerFromGame(unsigned int gameId, const LoggedUser& user);
 	Question getQuestionForUser(unsigned int gameId, const LoggedUser& user);
 	bool hasMoreQuestions(unsigned int gameId, const LoggedUser& user) const;

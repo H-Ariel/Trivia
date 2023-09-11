@@ -17,4 +17,9 @@ public:
 	virtual void addStatistics(const string& username, unsigned int gameId, float averangeAnswerTime, unsigned int correctAnswersCount, unsigned int totalAnswersCount) = 0;
 	virtual UserStatistics getUserStatistics(const string& username) = 0;
 	virtual vector<UserStatistics> getHighScore(int n) = 0; // returns n users with the highest score.
+
+	virtual unsigned int getGameId() = 0;
+	virtual void writeGameData(unsigned int id, unsigned int answerTimeout, unsigned int questionCount) = 0;
+
+	// TODO: add mutex here and use in sons
 };

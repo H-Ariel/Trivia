@@ -24,6 +24,8 @@ public:
 	UserStatistics getUserStatistics(const string& username) override;
 	vector<UserStatistics> getHighScore(int n) override;
 
+	unsigned int getGameId() override;
+	void writeGameData(unsigned int id, unsigned int answerTimeout, unsigned int questionCount) override;
 
 private:
 	sqlite3* _db;

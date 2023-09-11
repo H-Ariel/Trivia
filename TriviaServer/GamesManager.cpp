@@ -6,9 +6,10 @@ GamesManager::GamesManager(IDatabase* database)
 {
 }
 
-void GamesManager::createGame(unsigned int roomId, vector<LoggedUser> users, unsigned int questionCount)
+void GamesManager::createGame(const RoomData& roomData, const vector<LoggedUser>& users)
 {
-	_games[roomId] = allocNewSharedPtr<Game>(users, _database->getQuestions(questionCount));
+	_database->writeGameData(roomData.id, roomData.answerTimeout, roomData.questionCount);
+	_games[roomData.id] = allocNewSharedPtr<Game>(users, _database->getQuestions(roomData.questionCount));
 }
 
 void GamesManager::deleteGame(unsigned int gameId)

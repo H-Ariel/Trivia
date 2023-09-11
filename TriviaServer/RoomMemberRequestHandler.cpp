@@ -86,7 +86,7 @@ RequestResult RoomAdminRequestHandler::handleRequest(const RequestInfo& reqInfo)
 
 	case MessageCodes::StartGame:
 		_roomsManager.startGame(_roomId);
-		_handlerFactory.getGamesManager().createGame(_roomId, _roomsManager.getUsers(_roomId), _roomsManager.getRoomData(_roomId).questionCount);
+		_handlerFactory.getGamesManager().createGame(_roomsManager.getRoomData(_roomId), _roomsManager.getUsers(_roomId));
 		result.response = ResponsePacketSerializer::serializeOkResponse();
 		result.newHandler = _handlerFactory.createGameRequestHandler(_user, _roomId);
 		break;

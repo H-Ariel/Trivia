@@ -25,6 +25,7 @@ SqliteDatabase::SqliteDatabase(const string& dbFilename)
 			"CREATE TABLE USERS (username TEXT PRIMARY KEY NOT NULL, password TEXT NOT NULL, email TEXT NOT NULL);",
 			"CREATE TABLE QUESTIONS(question_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, question TEXT NOT NULL, correct_ans TEXT NOT NULL, ans2 TEXT NOT NULL, ans3 TEXT NOT NULL, ans4 TEXT NOT NULL);"
 			"CREATE TABLE STATISTICS(game_id INTEGER NOT NULL, username TEXT NOT NULL, averange_answer_time REAL NOT NULL, correct_answers_count INTEGER NOT NULL, total_answers_count INTEGER NOT NULL);"
+			"CREATE TABLE GAMES(game_id INTEGER NOT NULL, answer_timeout INTEGER NOT NULL, question_count INTEGER NOT NULL);"
 		};
 		
 		const Question DEFAULT_QUESTIONS[DEFAULT_QUESTIONS_COUNT] = {
@@ -125,6 +126,20 @@ UserStatistics SqliteDatabase::getUserStatistics(const string& username)
 vector<UserStatistics> SqliteDatabase::getHighScore(int n)
 {
 	throw Exception(__FUNCTION__ " DOES NOT IMPLETED");
+}
+
+unsigned int SqliteDatabase::getGameId()
+{
+	unsigned int id = 0;
+	runSqlStatements("SELECT MAX(game_id) FROM GAMES;", GetInt, &id);
+	return id + 1; // get next id
+}
+
+void SqliteDatabase::writeGameData(unsigned int id, unsigned int answerTimeout, unsigned int questionCount)
+{
+	char str[256] = {};
+	sprintf(str, "INSERT INTO GAMES VALUES(%d, %d, %d);", id, answerTimeout, questionCount);
+	runSqlStatements(str);
 }
 
 

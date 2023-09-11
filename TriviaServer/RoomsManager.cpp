@@ -1,13 +1,6 @@
 #include "RoomsManager.h"
 
 
-unsigned int getRoomId()
-{
-	static unsigned int currId = 0;
-	return ++currId;
-}
-
-
 RoomsManager::RoomsManager(IDatabase* database)
 	: _database(database)
 {
@@ -26,7 +19,7 @@ unsigned int RoomsManager::createRoom(const LoggedUser& admin, RoomData data)
 	if (data.questionCount > maxQuestionsCount)
 		data.questionCount = maxQuestionsCount;
 
-	data.id = getRoomId();
+	data.id = _database->getGameId();
 	data.hasGameStarted = false;
 	data.isActive = true;
 	_rooms[data.id] = Room(data);

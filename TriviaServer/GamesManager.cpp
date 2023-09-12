@@ -48,7 +48,14 @@ void GamesManager::submitAnswer(unsigned int gameId, const LoggedUser& user, uns
 vector<PlayerResults> GamesManager::getGameResults(unsigned int gameId) const
 {
 	checkIfExists(gameId);
-	return _games.at(gameId)->getGameResults();
+	vector<PlayerResults> results = _games.at(gameId)->getGameResults();
+
+	for (auto& r : results)
+	{
+		_database->addStatistics(r.username, gameId, r.averangeAnswerTime, r.correctAnswerCount);
+	}
+
+	return results;
 }
 
 void GamesManager::checkIfExists(unsigned int gameId) const

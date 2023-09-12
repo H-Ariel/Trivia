@@ -24,7 +24,7 @@ SqliteDatabase::SqliteDatabase(const string& dbFilename)
 		const char* INIT_SQL_STATMENTS[] = {
 			"CREATE TABLE USERS (username TEXT PRIMARY KEY NOT NULL, password TEXT NOT NULL, email TEXT NOT NULL);",
 			"CREATE TABLE QUESTIONS(question_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, question TEXT NOT NULL, correct_ans TEXT NOT NULL, ans2 TEXT NOT NULL, ans3 TEXT NOT NULL, ans4 TEXT NOT NULL);"
-			"CREATE TABLE STATISTICS(game_id INTEGER NOT NULL, username TEXT NOT NULL, averange_answer_time REAL NOT NULL, correct_answers_count INTEGER NOT NULL, total_answers_count INTEGER NOT NULL);"
+			"CREATE TABLE STATISTICS(game_id INTEGER NOT NULL, username TEXT NOT NULL, averange_answer_time REAL NOT NULL, correct_answers_count INTEGER NOT NULL);"
 			"CREATE TABLE GAMES(game_id INTEGER NOT NULL, answer_timeout INTEGER NOT NULL, question_count INTEGER NOT NULL);"
 		};
 		
@@ -110,11 +110,11 @@ void SqliteDatabase::addQuestion(const Question& question)
 	runSqlStatements("INSERT INTO QUESTIONS (question, correct_ans, ans2, ans3, ans4) VALUES (\"" + question.question + "\"," + possibleAnswers + ");");
 }
 
-void SqliteDatabase::addStatistics(const string& username, unsigned int gameId, float averangeAnswerTime, unsigned int correctAnswersCount, unsigned int totalAnswersCount)
+void SqliteDatabase::addStatistics(const string& username, unsigned int gameId, float averangeAnswerTime, unsigned int correctAnswersCount)
 {
 	char str[256] = {};
-	sprintf(str, "INSERT INTO STATISTICS VALUES(%d, \"%s\", %f, %d, %d);", gameId,
-		username.c_str(), averangeAnswerTime, correctAnswersCount, totalAnswersCount);
+	sprintf(str, "INSERT INTO STATISTICS VALUES(%d, \"%s\", %f, %d);", 
+		gameId, username.c_str(), averangeAnswerTime, correctAnswersCount);
 	runSqlStatements(str);
 }
 
@@ -175,7 +175,7 @@ int SqliteDatabase::GetQuestions(void* data, int argc, char** argv, char** azCol
 }
 int SqliteDatabase::GetInt(void* data, int argc, char** argv, char** azColName)
 {
-	if (argc == 1)
+	if (data && argc == 1 && argv[0])
 		*((unsigned int*)data) = stoi(argv[0]);
 	return 0;
 }

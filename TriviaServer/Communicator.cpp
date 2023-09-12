@@ -69,7 +69,7 @@ RequestInfo Communicator::readFromSocket(SOCKET sock)
 void Communicator::sendToSocket(SOCKET sock, RequestInfo reqInfo)
 {
 	Buffer buffer;
-	uint32_t len = reqInfo.msgData.size();
+	uint32_t len = (uint32_t)reqInfo.msgData.size();
 
 	buffer.push_back(reqInfo.msgCode);
 	buffer.insert(buffer.end(), (uint8_t*)(&len), (uint8_t*)(&len + 1));

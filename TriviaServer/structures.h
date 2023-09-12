@@ -78,7 +78,7 @@ struct PlayerResults
 {
 	string username;
 	unsigned int correctAnswerCount;
-	unsigned int wrongAnswerCount;
+	unsigned int wrongAnswerCount; // TODO: maybe not needed because it's the same as "totalAnswersCount-correctAnswerCount"
 	float averangeAnswerTime;
 };
 

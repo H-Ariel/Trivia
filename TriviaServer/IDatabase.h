@@ -14,7 +14,7 @@ public:
 	virtual vector<Question> getQuestions(unsigned int n) = 0; // returns `n` questions
 	virtual void addQuestion(const Question& question) = 0;
 
-	virtual void addStatistics(const string& username, unsigned int gameId, float averangeAnswerTime, unsigned int correctAnswersCount, unsigned int totalAnswersCount) = 0;
+	virtual void addStatistics(const string& username, unsigned int gameId, float averangeAnswerTime, unsigned int correctAnswersCount) = 0;
 	virtual UserStatistics getUserStatistics(const string& username) = 0;
 	virtual vector<UserStatistics> getHighScore(int n) = 0; // returns n users with the highest score.
 

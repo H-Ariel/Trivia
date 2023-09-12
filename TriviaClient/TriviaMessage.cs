@@ -248,4 +248,21 @@ namespace TriviaClient
 		}
 		public List<PlayerResults> results { set; get; }
 	}
+
+
+	class UserStatistics
+	{
+		public string username { set; get; }
+		public float score { set; get; }
+	};
+
+	class GetStatisticsResponse
+	{
+		static public GetStatisticsResponse Parse(string data)
+		{
+			return JsonSerializer.Deserialize<GetStatisticsResponse>(data);
+		}
+		public List<UserStatistics> highScore { set; get; }
+		public UserStatistics userStat { set; get; }
+	}
 }

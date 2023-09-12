@@ -43,7 +43,7 @@ namespace TriviaClient
 
 		private void Statistics(object sender, RoutedEventArgs e)
 		{
-
+			WindowsHandler.ShowWindow(this, new StatisticsWindow());
 		}
 	}
 }

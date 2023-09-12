@@ -24,7 +24,7 @@ namespace TriviaClient
 			InitializeComponent();
 
 			TriviaMessage.HandleMessage(
-				TriviaSocket.SendAndRead(new TriviaMessage(TriviaMessage.MessageCodes.GetStatistics)),
+				new TriviaMessage(TriviaMessage.MessageCodes.GetStatistics),
 				resp => {
 
 					GetStatisticsResponse statisticsResponse = GetStatisticsResponse.Parse(resp.Data);
@@ -42,21 +42,24 @@ namespace TriviaClient
 						Height = 10,
 					});
 
-					statistics.Children.Add(new TextBlock()
-					{
-						Text = $"Top {statisticsResponse.highScore.Count()}:",
-						Width = 320,
-						FontSize = 32
-					});
-
-					foreach (UserStatistics uStat in statisticsResponse.highScore)
+					if (statisticsResponse.highScore != null)
 					{
 						statistics.Children.Add(new TextBlock()
 						{
-							Text = $"your score: {uStat.username} - {uStat.score}",
+							Text = $"Top {statisticsResponse.highScore.Count()}:",
 							Width = 320,
-							FontSize = 28
+							FontSize = 32
 						});
+
+						foreach (UserStatistics uStat in statisticsResponse.highScore)
+						{
+							statistics.Children.Add(new TextBlock()
+							{
+								Text = $"your score: {uStat.username} - {uStat.score}",
+								Width = 320,
+								FontSize = 28
+							});
+						}
 					}
 				}
 			);

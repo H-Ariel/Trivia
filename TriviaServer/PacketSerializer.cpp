@@ -50,24 +50,24 @@ RequestInfo ResponsePacketSerializer::serializeResponse(const GetRoomsResponse& 
 
 RequestInfo ResponsePacketSerializer::serializeResponse(const GetStatisticsResponse& resp)
 {
-//	return BufferFromJson({ { "statistics", resp.statistics } });
-
-	json highScore ;
+	vector<json> highScore;
 	for (auto& i : resp.highScore)
 	{
-		highScore["username"] = i.username;
-		highScore["score"] = i.score;
+		json tmp;
+		tmp["username"] = i.username;
+		tmp["score"] = i.score;
+		highScore.push_back(tmp);
 	}
 
-	json userStat;
-	userStat["username"] = resp.userStat.username;
-	userStat["score"] = resp.userStat.score;
-
-	json j;
-	j["userStat"] = userStat;
-	j["highScore"] = highScore;
-
-	return BufferFromJson(j);
+	return BufferFromJson({
+		{
+			"userStat", {
+				{ "username", resp.userStat.username },
+				{ "score", resp.userStat.score}
+			} 
+		},
+		{ "highScore", highScore }
+	});
 }
 
 RequestInfo ResponsePacketSerializer::serializeResponse(const GetRoomStateResponse& resp)

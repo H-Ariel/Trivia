@@ -57,13 +57,12 @@ vector<PlayerResults> GamesManager::getGameResults(unsigned int gameId) const
 	{
 		return (float)correctAnswersCount / totalAnswersCount * 100 * gameCount / averangeAnswerTime;
 	}
-
+	*/
 
 	for (auto& r : results)
 	{
-		_database->addStatistics(r.username, gameId, );
+		_database->addStatistics(r.username, gameId, (float)r.correctAnswerCount / (r.correctAnswerCount + r.wrongAnswerCount));
 	}
-	*/
 
 	return results;
 }

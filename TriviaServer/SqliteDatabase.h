@@ -42,4 +42,6 @@ private:
 	static int HasArgs(void* data, int argc, char** argv, char** azColName);
 	static int GetQuestions(void* data, int argc, char** argv, char** azColName);
 	static int GetInt(void* data, int argc, char** argv, char** azColName);
+	static int GetUserScore(void* data, int argc, char** argv, char** azColName);
+	static int GetHighScoreCallback(void* data, int argc, char** argv, char** azColName);
 };

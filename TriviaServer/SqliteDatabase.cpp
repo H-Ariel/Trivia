@@ -111,12 +111,17 @@ void SqliteDatabase::addStatistics(const string& username, unsigned int gameId, 
 
 UserStatistics SqliteDatabase::getUserStatistics(const string& username)
 {
-	throw Exception(__FUNCTION__ " DOES NOT IMPLETED");
+	UserStatistics stat;
+	stat.username = username;
+	runSqlStatements(format("SELECT * FROM STATISTICS WHERE username=\"{}\";", username), GetUserScore, &stat.score);
+	return stat;
 }
 
 vector<UserStatistics> SqliteDatabase::getHighScore(int n)
 {
-	throw Exception(__FUNCTION__ " DOES NOT IMPLETED");
+	vector<UserStatistics> stats;
+	runSqlStatements(format("SELECT * FROM STATISTICS ORDER BY score DESC LIMIT {};", n), GetHighScoreCallback, &stats);
+	return stats;
 }
 
 unsigned int SqliteDatabase::getGameId()
@@ -170,5 +175,34 @@ int SqliteDatabase::GetInt(void* data, int argc, char** argv, char** azColName)
 {
 	if (data && argc == 1 && argv[0])
 		*((unsigned int*)data) = stoi(argv[0]);
+	return 0;
+}
+int SqliteDatabase::GetUserScore(void* data, int argc, char** argv, char** azColName)
+{
+	string colName;
+
+	for (int i = 0; i < argc; i++)
+	{
+		colName = azColName[i];
+		if (colName == "score")
+			*((float*)data) = stof(argv[i]);
+	}
+
+	return 0;
+}
+int SqliteDatabase::GetHighScoreCallback(void* data, int argc, char** argv, char** azColName)
+{
+	UserStatistics stat;
+	string colName;
+
+	for (int i = 0; i < argc; i++)
+	{
+		colName = azColName[i];
+		if (colName == "score") stat.score = stof(argv[i]);
+		else if (colName == "username") stat.username = argv[i];
+	}
+
+	((vector<UserStatistics>*)data)->push_back(stat);
+
 	return 0;
 }

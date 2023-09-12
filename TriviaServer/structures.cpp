@@ -19,16 +19,6 @@ RoomData::RoomData(const CreateRoomRequest& req)
 {
 }
 
-UserStatistics::UserStatistics()
-	: score(0)
-{
-}
-void UserStatistics::calcScore(unsigned int gameCount, float averangeAnswerTime, unsigned int correctAnswersCount, unsigned int totalAnswersCount)
-{
-	score = averangeAnswerTime * gameCount * correctAnswersCount / totalAnswersCount;
-}
-
-
 PlayerGameData::PlayerGameData()
 	: currentQuestionId(0), correctAnswerCount(0), wrongAnswerCount(0), 
 	averangeAnswerTime(0), isActive(true)
@@ -36,8 +26,9 @@ PlayerGameData::PlayerGameData()
 }
 
 Question::Question(string question, string correctAnswer, vector<string> wrongAnswers)
-	: question(question), correctAnswer(correctAnswer), wrongAnswers(wrongAnswers)
+	: question(question), correctAnswer(correctAnswer)
 {
+	for (int i = 0; i < 3; i++) this->wrongAnswers[i] = wrongAnswers[i];
 }
 
 GetRoomsResponse::GetRoomsResponse(vector<tuple<unsigned int, string>> rooms)

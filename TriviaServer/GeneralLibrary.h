@@ -24,6 +24,7 @@
 #include <mutex>
 #include <vector>
 #include <memory>
+#include <format>
 
 #include "structures.h"
 #include "Exception.hpp"

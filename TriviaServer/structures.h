@@ -50,14 +50,12 @@ struct Question
 
 	string question;
 	string correctAnswer;
-	vector<string> wrongAnswers;
+	string wrongAnswers[3]; // totaly 4 answers
 };
 
 struct UserStatistics
 {
-	UserStatistics();
-
-	void calcScore(unsigned int gameCount, float averangeAnswerTime, unsigned int correctAnswersCount, unsigned int totalAnswersCount);
+	UserStatistics() : score(0) {}
 
 	string username;
 	float score;
@@ -76,6 +74,8 @@ struct PlayerGameData
 
 struct PlayerResults
 {
+	PlayerResults() : correctAnswerCount(0), wrongAnswerCount(0), averangeAnswerTime(0) {}
+
 	string username;
 	unsigned int correctAnswerCount;
 	unsigned int wrongAnswerCount; // TODO: maybe not needed because it's the same as "totalAnswersCount-correctAnswerCount"

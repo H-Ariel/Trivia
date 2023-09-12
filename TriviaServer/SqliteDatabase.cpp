@@ -2,9 +2,6 @@
 #include "sqlite3.h"
 
 
-#define DEFAULT_QUESTIONS_COUNT 10
-
-
 SqliteDatabase::SqliteDatabase(const string& dbFilename)
 	: _db(nullptr)
 {
@@ -23,12 +20,12 @@ SqliteDatabase::SqliteDatabase(const string& dbFilename)
 		// SQL statements to create the database
 		const char* INIT_SQL_STATMENTS[] = {
 			"CREATE TABLE USERS (username TEXT PRIMARY KEY NOT NULL, password TEXT NOT NULL, email TEXT NOT NULL);",
-			"CREATE TABLE QUESTIONS(question_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, question TEXT NOT NULL, correct_ans TEXT NOT NULL, ans2 TEXT NOT NULL, ans3 TEXT NOT NULL, ans4 TEXT NOT NULL);"
-			"CREATE TABLE STATISTICS(game_id INTEGER NOT NULL, username TEXT NOT NULL, averange_answer_time REAL NOT NULL, correct_answers_count INTEGER NOT NULL);"
-			"CREATE TABLE GAMES(game_id INTEGER NOT NULL, answer_timeout INTEGER NOT NULL, question_count INTEGER NOT NULL);"
+			"CREATE TABLE QUESTIONS(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, question TEXT NOT NULL, correct_ans TEXT NOT NULL, ans2 TEXT NOT NULL, ans3 TEXT NOT NULL, ans4 TEXT NOT NULL);"
+			"CREATE TABLE STATISTICS(game_id INTEGER NOT NULL, username TEXT NOT NULL, score REAL NOT NULL);"
+			"CREATE TABLE GAMES(id INTEGER NOT NULL, answer_timeout INTEGER NOT NULL, question_count INTEGER NOT NULL);"
 		};
 		
-		const Question DEFAULT_QUESTIONS[DEFAULT_QUESTIONS_COUNT] = {
+		const Question DEFAULT_QUESTIONS[] = {
 			Question("0 + 1 = ", "1", { "a", "b", "c" }),
 			Question("1 + 1 = ", "2", { "a", "b", "c" }),
 			Question("2 + 1 = ", "3", { "a", "b", "c" }),
@@ -69,53 +66,47 @@ SqliteDatabase::~SqliteDatabase()
 bool SqliteDatabase::doesUserExist(const string& username)
 {
 	bool exist = false;
-	runSqlStatements("SELECT * FROM USERS WHERE username=\"" + username + "\";", SqliteDatabase::HasArgs, &exist);
+	runSqlStatements(format("SELECT * FROM USERS WHERE username=\"{}\";", username), SqliteDatabase::HasArgs, &exist);
 	return exist;
 }
 
 bool SqliteDatabase::doesPasswordMatch(const string& username, const string& password)
 {
 	bool exist = false;
-	runSqlStatements("SELECT * FROM USERS WHERE username=\"" + username + "\" AND password=\"" + password + "\";", SqliteDatabase::HasArgs, &exist);
+	runSqlStatements(format("SELECT * FROM USERS WHERE username=\"{}\" AND password=\"{}\";", username, password), SqliteDatabase::HasArgs, &exist);
 	return exist;
 }
 
 void SqliteDatabase::addNewUser(const string& username, const string& password, const string& email)
 {
-	runSqlStatements("INSERT INTO USERS VALUES(\"" + username + "\",\"" + password + "\",\"" + email + "\");");
+	runSqlStatements(format("INSERT INTO USERS VALUES(\"{}\",\"{}\",\"{}\");", username, password, email));
 }
 
 unsigned int SqliteDatabase::getMaxQuestionsCount()
 {
 	unsigned int count = 0;
-	runSqlStatements("SELECT COUNT(*) FROM QUESTIONS;", SqliteDatabase::GetInt, &count);
+	runSqlStatements("SELECT COUNT(*) FROM QUESTIONS;", GetInt, &count);
 	return count;
 }
 
 vector<Question> SqliteDatabase::getQuestions(unsigned int n)
 {
 	vector<Question> questions;
-	runSqlStatements("SELECT * FROM QUESTIONS WHERE question_id <= " + to_string(n) + ";", SqliteDatabase::GetQuestions, &questions);
+	runSqlStatements(format("SELECT * FROM QUESTIONS WHERE id <= {};", n), GetQuestions, &questions);
 	return questions;
 }
 
 void SqliteDatabase::addQuestion(const Question& question)
 {
-	string possibleAnswers;
-
-	possibleAnswers += '"' + question.correctAnswer + '"';
-	for (const string& ans : question.wrongAnswers)
-		possibleAnswers += ",\"" + ans + '"';
-
-	runSqlStatements("INSERT INTO QUESTIONS (question, correct_ans, ans2, ans3, ans4) VALUES (\"" + question.question + "\"," + possibleAnswers + ");");
+	runSqlStatements(format("INSERT INTO QUESTIONS (question, correct_ans, ans2, ans3, ans4) \
+		VALUES(\"{}\",\"{}\",\"{}\",\"{}\",\"{}\");",
+		question.question, question.correctAnswer, question.wrongAnswers[0],
+		question.wrongAnswers[1], question.wrongAnswers[2]));
 }
 
-void SqliteDatabase::addStatistics(const string& username, unsigned int gameId, float averangeAnswerTime, unsigned int correctAnswersCount)
+void SqliteDatabase::addStatistics(const string& username, unsigned int gameId, float score)
 {
-	char str[256] = {};
-	sprintf(str, "INSERT INTO STATISTICS VALUES(%d, \"%s\", %f, %d);", 
-		gameId, username.c_str(), averangeAnswerTime, correctAnswersCount);
-	runSqlStatements(str);
+	runSqlStatements(format("INSERT INTO STATISTICS VALUES({}, \"{}\", {} );", gameId, username, score));
 }
 
 UserStatistics SqliteDatabase::getUserStatistics(const string& username)
@@ -131,7 +122,7 @@ vector<UserStatistics> SqliteDatabase::getHighScore(int n)
 unsigned int SqliteDatabase::getGameId()
 {
 	unsigned int id = 0;
-	runSqlStatements("SELECT MAX(game_id) FROM GAMES;", GetInt, &id);
+	runSqlStatements("SELECT MAX(id) FROM GAMES;", GetInt, &id);
 	return id + 1; // get next id
 }
 
@@ -167,8 +158,10 @@ int SqliteDatabase::GetQuestions(void* data, int argc, char** argv, char** azCol
 	{
 		colName = azColName[i];
 		if (colName == "question") temp.question = argv[i];
-		else if (colName == "ans2" || colName == "ans3" || colName == "ans4") temp.wrongAnswers.push_back(argv[i]);
 		else if (colName == "correct_ans") temp.correctAnswer = argv[i];
+		else if (colName == "ans2") temp.wrongAnswers[0] = argv[i];
+		else if (colName == "ans3") temp.wrongAnswers[1] = argv[i];
+		else if (colName == "ans4") temp.wrongAnswers[2] = argv[i];
 	}
 	((vector<Question>*)data)->push_back(temp);
 	return 0;

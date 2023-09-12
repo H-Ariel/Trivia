@@ -19,8 +19,7 @@ void Game::submitAnswer(const LoggedUser& user, unsigned int answerId)
 {
 	if (answerId == 0)
 	{
-		// we send the answers when the first answer is the correct
-		// so 0 is the correct answer id
+		// we send the answers when the first answer is the correct -so 0 is the correct answer id
 		players[user].correctAnswerCount += 1;
 	}
 	else

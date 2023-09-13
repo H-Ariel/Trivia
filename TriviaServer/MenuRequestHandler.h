@@ -7,13 +7,17 @@
 class MenuRequestHandler : public IRequestHandler
 {
 public:
-	MenuRequestHandler(const LoggedUser& user, RequestHandlerFactory& handlerFactory);
+	MenuRequestHandler(RequestHandlerFactory* handlerFactory, const LoggedUser& user);
 
-	RequestResult handleRequest(const RequestInfo& reqInfo) override;
+	RequestResult handleRequest(const RequestInfo&) override;
 
 private:
+	RequestResult logout();
+	RequestResult createRoom(const RequestInfo&);
+	RequestResult getRooms();
+	RequestResult joinRoom(const RequestInfo&);
+	RequestResult getStatistics();
+
 	const LoggedUser _user;
-	RoomsManager& _roomsManager;
-	StatisticsManager& _statisticsManager;
-	RequestHandlerFactory& _handlerFactory;
+	RequestHandlerFactory* _handlerFactory;
 };

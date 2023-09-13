@@ -1,54 +1,51 @@
 #include "MenuRequestHandler.h"
 #include "PacketSerializer.h"
-#include "RoomMemberRequestHandler.h"
 
 
-MenuRequestHandler::MenuRequestHandler(const LoggedUser& user, RequestHandlerFactory& handlerFactory)
-	: _user(user), _handlerFactory(handlerFactory), _roomsManager(handlerFactory.getRoomsManager()), _statisticsManager(handlerFactory.getStatisticsManager())
+MenuRequestHandler::MenuRequestHandler(RequestHandlerFactory* handlerFactory, const LoggedUser& user)
+	: _user(user), _handlerFactory(handlerFactory)
 {
 }
 
 RequestResult MenuRequestHandler::handleRequest(const RequestInfo& reqInfo)
 {
-	RequestResult result;
-
 	switch (reqInfo.msgCode)
 	{
-	case MessageCodes::Logout:
-		_handlerFactory.getLoginManager().logout(_user);
-		result.response = ResponsePacketSerializer::serializeOkResponse();
-		result.newHandler = nullptr;
-		break;
-
-	case MessageCodes::CreateRoom:
-		result.newHandler = _handlerFactory.createRoomAdminRequestHandler(_user, _roomsManager.createRoom(_user,
-			RoomData(RequestPacketDeserializer::deserializeCreateRoomRequest(reqInfo))));
-		result.response = ResponsePacketSerializer::serializeOkResponse();
-		break;
-
-	case MessageCodes::GetRooms:
-		result.response = ResponsePacketSerializer::serializeResponse(GetRoomsResponse(_roomsManager.getRooms()));
-		result.changeHandler = false;
-		break;
-
-	case MessageCodes::JoinRoom: {
-		JoinRoomRequest req = RequestPacketDeserializer::deserializeJoinRoomRequest(reqInfo);
-		_roomsManager.addUserToRoom(_user, req.roomId);
-		result.response = ResponsePacketSerializer::serializeOkResponse();
-		result.newHandler = _handlerFactory.createRoomMemberRequestHandler(_user, req.roomId);
-	}	break;
-
-	case MessageCodes::GetStatistics: {
-	//	throw Exception("not impleted");
-		result.response = ResponsePacketSerializer::serializeResponse(
-			GetStatisticsResponse(_statisticsManager.getHighScore(), _statisticsManager.getUserStatistics(_user.getUsername()))
-		);
-		result.changeHandler = false;
-	}	break;
-
-	default:
-		throw Exception("irrelevant request");
+	case MessageCodes::Logout: return logout();
+	case MessageCodes::CreateRoom: return createRoom(reqInfo);
+	case MessageCodes::GetRooms: return getRooms();
+	case MessageCodes::JoinRoom: return joinRoom(reqInfo);
+	case MessageCodes::GetStatistics: return getStatistics();
 	}
+	throw Exception("irrelevant request");
+}
 
-	return result;
+RequestResult MenuRequestHandler::logout()
+{
+	_handlerFactory->getLoginManager().logout(_user);
+	return RequestResult(ResponsePacketSerializer::serializeOkResponse(), nullptr);
+}
+RequestResult MenuRequestHandler::createRoom(const RequestInfo& reqInfo)
+{
+	return RequestResult(ResponsePacketSerializer::serializeOkResponse(),
+		_handlerFactory->createRoomAdminRequestHandler(_user, _handlerFactory->getRoomsManager().createRoom(_user,
+			RoomData(RequestPacketDeserializer::deserializeCreateRoomRequest(reqInfo)))));
+}
+RequestResult MenuRequestHandler::getRooms()
+{
+	return RequestResult(ResponsePacketSerializer::serializeResponse(GetRoomsResponse(_handlerFactory->getRoomsManager().getRooms())));
+}
+RequestResult MenuRequestHandler::joinRoom(const RequestInfo& reqInfo)
+{
+	unsigned int id = RequestPacketDeserializer::deserializeJoinRoomRequest(reqInfo).roomId;
+	_handlerFactory->getRoomsManager().addUserToRoom(_user, id);
+	return RequestResult(ResponsePacketSerializer::serializeOkResponse(),
+		_handlerFactory->createRoomMemberRequestHandler(_user, id));
+}
+RequestResult MenuRequestHandler::getStatistics()
+{
+	StatisticsManager& statisticsManager = _handlerFactory->getStatisticsManager();
+	return RequestResult(ResponsePacketSerializer::serializeResponse(
+		GetStatisticsResponse(statisticsManager.getHighScore(), statisticsManager.getUserStatistics(_user.getUsername()))
+	));
 }

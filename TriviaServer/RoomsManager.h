@@ -15,7 +15,7 @@ public:
 	void addUserToRoom(const LoggedUser& user, unsigned int roomId);
 	void removeUserFromRoom(const LoggedUser& user, unsigned int roomId);
 	void startGame(unsigned int roomId);
-	vector<tuple<unsigned int, string>> getRooms() const;
+	map<unsigned int, string> getRooms() const;
 	Room& getRoom(unsigned int roomId);
 	const RoomData& getRoomData(unsigned int roomId) const;
 	vector<string> getUsernames(unsigned int roomId) const;

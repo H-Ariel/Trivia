@@ -2,9 +2,9 @@
 
 #include <string>
 #include <vector>
-#include <list>
-#include <tuple>
+#include <map>
 #include <cstdint>
+#include <chrono>
 
 using namespace std;
 
@@ -24,12 +24,11 @@ struct CreateRoomRequest;
 
 struct RoomData
 {
-	RoomData() = default;
 	RoomData(
-		const string& name,
-		unsigned int maxUsers,
-		unsigned int questionCount,
-		unsigned int answerTimeout
+		const string& name = "",
+		unsigned int maxUsers = 0,
+		unsigned int questionCount = 0,
+		unsigned int answerTimeout = 0
 	);
 	RoomData(const CreateRoomRequest&);
 
@@ -55,27 +54,20 @@ struct Question
 
 struct UserStatistics
 {
+	UserStatistics(const string& username = "", float score = 0)
+		: username(username), score(score) {}
 	string username;
 	float score = 0;
 };
 
 struct PlayerGameData
 {
+	chrono::system_clock::time_point timeGetQuestion; // save current time when get question for calculate the averange answer time
 	unsigned int currentQuestionId = 0;
 	unsigned int correctAnswerCount = 0;
-	unsigned int wrongAnswerCount = 0;
 	float averangeAnswerTime = 0;
 	bool isActive = true; // inactive player is a player who leaves the game in the middle
 };
-
-struct PlayerResults
-{
-	string username;
-	unsigned int correctAnswerCount = 0;
-	unsigned int wrongAnswerCount = 0; // TODO: maybe not needed because it's the same as "totalAnswersCount-correctAnswerCount"
-	float averangeAnswerTime = 0;
-};
-
 
 
 /* Response Struct-s */
@@ -84,14 +76,14 @@ struct ErrorResponse
 {
 	ErrorResponse(const string& message) 
 		: message(message) {}
-	const string message;
+	string message;
 };
 
 struct GetRoomsResponse
 {
-	GetRoomsResponse(const vector<tuple<unsigned int, string>>& rooms)
+	GetRoomsResponse(const map<unsigned int, string>& rooms)
 		: rooms(rooms) {}
-	vector<tuple<unsigned int, string>> rooms;
+	map<unsigned int, string> rooms;
 };
 
 struct GetStatisticsResponse
@@ -125,9 +117,9 @@ struct GetQuestionResponse
 
 struct GetGameResultsResponse
 {
-	GetGameResultsResponse(const vector<PlayerResults>& results)
+	GetGameResultsResponse(const vector<UserStatistics>& results)
 		: results(results) {}
-	vector<PlayerResults> results;
+	vector<UserStatistics> results;
 };
 
 

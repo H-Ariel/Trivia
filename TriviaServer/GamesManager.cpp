@@ -45,25 +45,11 @@ void GamesManager::submitAnswer(unsigned int gameId, const LoggedUser& user, uns
 	_games[gameId]->submitAnswer(user, answerId);
 }
 
-vector<PlayerResults> GamesManager::getGameResults(unsigned int gameId) const
+vector<UserStatistics> GamesManager::getGameResults(unsigned int gameId) const
 {
 	checkIfExists(gameId);
-	vector<PlayerResults> results = _games.at(gameId)->getGameResults();
-
-	/*
-	// TODO: calc total score
-
-	void calcScore(unsigned int gameCount, float averangeAnswerTime, unsigned int correctAnswersCount, unsigned int totalAnswersCount)
-	{
-		return (float)correctAnswersCount / totalAnswersCount * 100 * gameCount / averangeAnswerTime;
-	}
-	*/
-
-	for (auto& r : results)
-	{
-		_database->addStatistics(r.username, gameId, (float)r.correctAnswerCount / (r.correctAnswerCount + r.wrongAnswerCount));
-	}
-
+	vector<UserStatistics> results = _games.at(gameId)->getGameResults();
+	for (auto& r : results) _database->addStatistics(r.username, gameId, r.score);
 	return results;
 }
 

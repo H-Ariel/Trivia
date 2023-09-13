@@ -7,16 +7,15 @@
 class RoomMemberRequestHandler : public IRequestHandler
 {
 public:
-	RoomMemberRequestHandler(const LoggedUser& user, unsigned int roomId, RequestHandlerFactory& handlerFactory);
-	RequestResult handleRequest(const RequestInfo& reqInfo) override;
-
+	RoomMemberRequestHandler(RequestHandlerFactory* handlerFactory, const LoggedUser& user, unsigned int roomId);
+	RequestResult handleRequest(const RequestInfo&) override;
 
 protected:
-	RequestResult handleGetRoomState();
+	RequestResult getRoomState();
+	virtual RequestResult leaveRoom();
 
 	const LoggedUser _user;
-	RoomsManager& _roomsManager;
-	RequestHandlerFactory& _handlerFactory;
+	RequestHandlerFactory* _handlerFactory;
 	const unsigned int _roomId;
 };
 
@@ -25,6 +24,11 @@ protected:
 class RoomAdminRequestHandler : public RoomMemberRequestHandler
 {
 public:
-	RoomAdminRequestHandler(const LoggedUser& user, unsigned int roomId, RequestHandlerFactory& handlerFactory);
-	RequestResult handleRequest(const RequestInfo& reqInfo) override;
+	RoomAdminRequestHandler(RequestHandlerFactory* handlerFactory, const LoggedUser& user, unsigned int roomId);
+	RequestResult handleRequest(const RequestInfo&) override;
+
+private:
+	RequestResult leaveRoom() override;
+	RequestResult startGame();
+
 };

@@ -12,25 +12,25 @@ RequestHandlerFactory::RequestHandlerFactory(IDatabase* database)
 
 shared_ptr<IRequestHandler> RequestHandlerFactory::createLoginRequestHandler(int id)
 {
-	return shared_ptr<IRequestHandler>(DBG_NEW LoginRequestHandler(*this, id));
+	return shared_ptr<IRequestHandler>(DBG_NEW LoginRequestHandler(this, id));
 }
 
 shared_ptr<IRequestHandler> RequestHandlerFactory::createMenuRequestHandler(const LoggedUser& user)
 {
-	return shared_ptr<IRequestHandler>(DBG_NEW MenuRequestHandler(user, *this));
+	return shared_ptr<IRequestHandler>(DBG_NEW MenuRequestHandler(this, user));
 }
 
 shared_ptr<IRequestHandler> RequestHandlerFactory::createRoomMemberRequestHandler(const LoggedUser& user, unsigned int roomId)
 {
-	return shared_ptr<IRequestHandler>(DBG_NEW RoomMemberRequestHandler(user, roomId, *this));
+	return shared_ptr<IRequestHandler>(DBG_NEW RoomMemberRequestHandler(this, user, roomId));
 }
 
 shared_ptr<IRequestHandler> RequestHandlerFactory::createRoomAdminRequestHandler(const LoggedUser& user, unsigned int roomId)
 {
-	return shared_ptr<IRequestHandler>(DBG_NEW RoomAdminRequestHandler(user, roomId, *this));
+	return shared_ptr<IRequestHandler>(DBG_NEW RoomAdminRequestHandler(this, user, roomId));
 }
 
 shared_ptr<IRequestHandler> RequestHandlerFactory::createGameRequestHandler(const LoggedUser& user, unsigned int gameId)
 {
-	return shared_ptr<IRequestHandler>(DBG_NEW GameRequestHandler(user, gameId, *this));
+	return shared_ptr<IRequestHandler>(DBG_NEW GameRequestHandler(this, user, gameId));
 }

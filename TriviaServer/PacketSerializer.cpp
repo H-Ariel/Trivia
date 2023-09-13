@@ -3,51 +3,39 @@
 
 using nlohmann::json;
 
+#define CheckIfJsonContains(k) if (!j.contains(k)) throw Exception("json does not contains key: " k);
+
 
 inline json JsonFromBuffer(const RequestInfo& reqInfo)
 {
 	return json::parse(string(reqInfo.msgData.begin(), reqInfo.msgData.end()));
 }
-
-RequestInfo BufferFromJson(const json& j, MessageCodes code = MessageCodes::OK)
+RequestInfo JsonToBuffer(const json& j, MessageCodes code = MessageCodes::OK)
 {
 	const string data(j.dump());
-
 	RequestInfo reqInfo;
-	
 	reqInfo.msgCode = code;
 	reqInfo.msgData = Buffer(begin(data), end(data));
-
 	return reqInfo;
 }
 
-
 RequestInfo ResponsePacketSerializer::serializeOkResponse()
 {
-	return BufferFromJson({});
+	return JsonToBuffer({});
 }
-
 RequestInfo ResponsePacketSerializer::serializeErrorResponse(const string& message)
 {
-	return BufferFromJson({ { "message", message } }, MessageCodes::Error);
+	return JsonToBuffer({ { "message", message } }, MessageCodes::Error);
 }
-
-
 RequestInfo ResponsePacketSerializer::serializeResponse(const GetRoomsResponse& resp)
 {
 	vector<json> v;
 
-	for (const tuple<unsigned int, string>& i : resp.rooms)
-	{
-		v.push_back({
-			{ "id", get<0>(i) },
-			{ "name", get<1>(i) },
-		});
-	}
+	for (auto& i : resp.rooms)
+		v.push_back({ { "id", i.first }, { "name", i.second } });
 
-	return BufferFromJson({ { "rooms", v } });
+	return JsonToBuffer({ { "rooms", v } });
 }
-
 RequestInfo ResponsePacketSerializer::serializeResponse(const GetStatisticsResponse& resp)
 {
 	vector<json> highScore;
@@ -59,7 +47,7 @@ RequestInfo ResponsePacketSerializer::serializeResponse(const GetStatisticsRespo
 		highScore.push_back(tmp);
 	}
 
-	return BufferFromJson({
+	return JsonToBuffer({
 		{
 			"userStat", {
 				{ "username", resp.userStat.username },
@@ -69,10 +57,9 @@ RequestInfo ResponsePacketSerializer::serializeResponse(const GetStatisticsRespo
 		{ "highScore", highScore }
 	});
 }
-
 RequestInfo ResponsePacketSerializer::serializeResponse(const GetRoomStateResponse& resp)
 {
-	return BufferFromJson({
+	return JsonToBuffer({
 		{ "answerTimeout", resp.answerTimeout },
 		{ "hasGameStarted", resp.hasGameStarted },
 		{ "isActive", resp.isActive },
@@ -81,35 +68,20 @@ RequestInfo ResponsePacketSerializer::serializeResponse(const GetRoomStateRespon
 		{ "questionCount", resp.questionCount },
 	});
 }
-
 RequestInfo ResponsePacketSerializer::serializeResponse(const GetQuestionResponse& resp)
 {
-	return BufferFromJson({
+	return JsonToBuffer({
 		{ "answers", resp.answers },
 		{ "question", resp.question }
 	});
 }
-
 RequestInfo ResponsePacketSerializer::serializeResponse(const GetGameResultsResponse& resp)
 {
 	vector<json> v;
-
-	for (const PlayerResults& i : resp.results)
-	{
-		v.push_back({
-			{ "averangeAnswerTime", i.averangeAnswerTime },
-			{ "correctAnswerCount", i.correctAnswerCount },
-			{ "username", i.username },
-			{ "wrongAnswerCount", i.wrongAnswerCount }
-		});
-	}
-
-	return BufferFromJson({ { "results", v } });
+	for (const UserStatistics& i : resp.results)
+		v.push_back({ { "username", i.username }, { "score", i.score } });
+	return JsonToBuffer({ { "results", v } });
 }
-
-
-#define CheckIfJsonContains(k) if (!j.contains(k)) throw Exception("json does not contains key: " k);
-
 
 LoginRequest RequestPacketDeserializer::deserializeLoginRequest(const RequestInfo& reqInfo)
 {
@@ -121,7 +93,6 @@ LoginRequest RequestPacketDeserializer::deserializeLoginRequest(const RequestInf
 	r.password = j["password"];
 	return r;
 }
-
 SignupRequest RequestPacketDeserializer::deserializeSignupRequest(const RequestInfo& reqInfo)
 {
 	const json j = JsonFromBuffer(reqInfo);
@@ -134,7 +105,6 @@ SignupRequest RequestPacketDeserializer::deserializeSignupRequest(const RequestI
 	r.email = j["email"];
 	return r;
 }
-
 CreateRoomRequest RequestPacketDeserializer::deserializeCreateRoomRequest(const RequestInfo& reqInfo)
 {
 	const json j = JsonFromBuffer(reqInfo);
@@ -149,7 +119,6 @@ CreateRoomRequest RequestPacketDeserializer::deserializeCreateRoomRequest(const 
 	r.roomName = j["roomName"];
 	return r;
 }
-
 JoinRoomRequest RequestPacketDeserializer::deserializeJoinRoomRequest(const RequestInfo& reqInfo)
 {
 	const json j = JsonFromBuffer(reqInfo);
@@ -158,7 +127,6 @@ JoinRoomRequest RequestPacketDeserializer::deserializeJoinRoomRequest(const Requ
 	r.roomId = j["roomId"];
 	return r;
 }
-
 SubmitAnswerRequest RequestPacketDeserializer::deserializeSubmitAnswerRequest(const RequestInfo& reqInfo)
 {
 	const json j = JsonFromBuffer(reqInfo);

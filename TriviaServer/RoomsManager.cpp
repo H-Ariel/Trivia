@@ -60,14 +60,14 @@ void RoomsManager::startGame(unsigned int roomId)
 	_rooms[roomId].startGame();
 }
 
-vector<tuple<unsigned int, string>> RoomsManager::getRooms() const
+map<unsigned int, string> RoomsManager::getRooms() const
 {
-	vector<tuple<unsigned int, string>> v;
+	map<unsigned int, string> v;
 	for (auto& i : _rooms)
 	{
 		const RoomData& rd = i.second.getRoomData();
 		if (!rd.hasGameStarted)
-			v.push_back({ rd.id, rd.name });
+			v[rd.id] = rd.name;
 	}
 	return v;
 }

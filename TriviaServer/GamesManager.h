@@ -15,7 +15,7 @@ public:
 	Question getQuestionForUser(unsigned int gameId, const LoggedUser& user);
 	bool hasMoreQuestions(unsigned int gameId, const LoggedUser& user) const;
 	void submitAnswer(unsigned int gameId, const LoggedUser& user, unsigned int answerId);
-	vector<PlayerResults> getGameResults(unsigned int gameId) const;
+	vector<UserStatistics> getGameResults(unsigned int gameId) const;
 
 
 private:

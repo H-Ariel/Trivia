@@ -42,7 +42,7 @@ namespace TriviaClient
 					{
 						statistics.Children.Add(new TextBlock()
 						{
-							Text = $"your score: {uStat.username} - {uStat.score}",
+							Text = $"{uStat.username} :  {uStat.score}",
 							Width = 320,
 							FontSize = 28
 						});

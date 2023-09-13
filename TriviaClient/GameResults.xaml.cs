@@ -46,27 +46,17 @@ namespace TriviaClient
 				WrapPanel wrapPanel = new WrapPanel();
 				wrapPanel.Children.Add(new TextBlock() { Text = "username", Width = 200, FontSize = 25, TextWrapping = TextWrapping.Wrap });
 				wrapPanel.Children.Add(new Separator() { Width = 10, Opacity = 0 });
-				wrapPanel.Children.Add(new TextBlock() { Text = "correct answers", Width = 120, FontSize = 25, TextWrapping = TextWrapping.Wrap });
-				wrapPanel.Children.Add(new Separator() { Width = 10, Opacity = 0 });
-				wrapPanel.Children.Add(new TextBlock() { Text = "wrong answers", Width = 120, FontSize = 25, TextWrapping = TextWrapping.Wrap });
-				wrapPanel.Children.Add(new Separator() { Width = 10, Opacity = 0 });
-				wrapPanel.Children.Add(new TextBlock() { Text = "average answer time (secs)", Width = 180, FontSize = 25, TextWrapping = TextWrapping.Wrap });
-
+				wrapPanel.Children.Add(new TextBlock() { Text = "score", Width = 180, FontSize = 25, TextWrapping = TextWrapping.Wrap });
 				spGameResults.Children.Add(wrapPanel);
 			}
-			spGameResults.Children.Add(new Separator() { Height = 5 });
 
 			foreach (PlayerResults res in results)
 			{
+				spGameResults.Children.Add(new Separator() { Height = 5 });
 				WrapPanel wrapPanel = new WrapPanel();
 				wrapPanel.Children.Add(new TextBlock() { Text = res.username, Width = 200, FontSize = 25, TextWrapping = TextWrapping.Wrap });
 				wrapPanel.Children.Add(new Separator() { Width = 10, Opacity = 0 });
-				wrapPanel.Children.Add(new TextBlock() { Text = res.correctAnswerCount.ToString(), Width = 120, FontSize = 25, TextWrapping = TextWrapping.Wrap });
-				wrapPanel.Children.Add(new Separator() { Width = 10, Opacity = 0 });
-				wrapPanel.Children.Add(new TextBlock() { Text = res.wrongAnswerCount.ToString(), Width = 120, FontSize = 25, TextWrapping = TextWrapping.Wrap });
-				wrapPanel.Children.Add(new Separator() { Width = 10, Opacity = 0 });
-				wrapPanel.Children.Add(new TextBlock() { Text = res.averangeAnswerTime.ToString(), Width = 180, FontSize = 25, TextWrapping = TextWrapping.Wrap });
-				wrapPanel.Children.Add(new Separator() { Height = 5 });
+				wrapPanel.Children.Add(new TextBlock() { Text = res.score.ToString(), Width = 180, FontSize = 25, TextWrapping = TextWrapping.Wrap });
 				spGameResults.Children.Add(wrapPanel);
 			}
 		}

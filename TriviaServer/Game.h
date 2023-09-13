@@ -14,7 +14,7 @@ public:
 	void removePlayer(const LoggedUser& user);
 
 	bool hasMoreQuestions(const LoggedUser& user) const;
-	vector<PlayerResults> getGameResults() const;
+	vector<UserStatistics> getGameResults() const;
 	bool isEmpty() const;
 
 

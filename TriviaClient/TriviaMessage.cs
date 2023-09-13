@@ -238,9 +238,10 @@ namespace TriviaClient
 	class PlayerResults
 	{
 		public string username { set; get; }
-		public int correctAnswerCount { set; get; }
-		public int wrongAnswerCount { set; get; }
-		public float averangeAnswerTime { set; get; }
+		//public int correctAnswerCount { set; get; }
+		//public int wrongAnswerCount { set; get; }
+		//public float averangeAnswerTime { set; get; }
+		public float score { set; get; }
 	}
 	class GetGameResultsResponse
 	{

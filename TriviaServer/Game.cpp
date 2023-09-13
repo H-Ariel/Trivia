@@ -1,7 +1,7 @@
 #include "Game.h"
 
 
-Game::Game(vector<LoggedUser> users, vector<Question> questions)
+Game::Game(const vector<LoggedUser>& users, const vector<Question>& questions)
 	: questions(questions)
 {
 	for (const LoggedUser& user : users)

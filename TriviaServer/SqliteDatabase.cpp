@@ -5,7 +5,8 @@
 SqliteDatabase::SqliteDatabase(const string& dbFilename)
 	: _db(nullptr)
 {
-	bool fileExist = doesFileExist(dbFilename);
+	struct stat s;
+	bool fileExist = (stat(dbFilename.c_str(), &s) == 0);
 
 	if (sqlite3_open(dbFilename.c_str(), &_db) != SQLITE_OK)
 	{
@@ -141,8 +142,12 @@ void SqliteDatabase::writeGameData(unsigned int id, unsigned int answerTimeout, 
 
 void SqliteDatabase::runSqlStatements(const string& sqlStatements, SQLite3Callback callback, void* dataToCallback)
 {
+	_dbMutex.lock();
 	char* errMessage = nullptr;
-	if (sqlite3_exec(_db, sqlStatements.c_str(), callback, dataToCallback, &errMessage) != SQLITE_OK)
+	int err = sqlite3_exec(_db, sqlStatements.c_str(), callback, dataToCallback, &errMessage);
+	_dbMutex.unlock();
+
+	if (err != SQLITE_OK)
 		throw Exception("Error in " __FUNCTION__ ":\nsqlStatements = " + sqlStatements + "\nerrMessage = " + (errMessage ? errMessage : ""));
 }
 

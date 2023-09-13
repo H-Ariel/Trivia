@@ -9,7 +9,7 @@
 	#define _CRTDBG_MAP_ALLOC
 	#include <stdlib.h>
 	#include <crtdbg.h>
-	#define DBG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__) // TODO: use `std::uniqe_ptr` / `std::shared_ptr`
+	#define DBG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
 #else
 	#define DBG_NEW new // do not check for memory leaks
 #endif
@@ -58,16 +58,6 @@ enum MessageCodes : uint8_t
 	LeaveGame
 };
 
-
-/*
- * Functions
- */
-
-inline bool doesFileExist(string filename) // TODO: find better place
-{
-	struct stat s;
-	return (stat(filename.c_str(), &s) == 0);
-}
 
 // allocate new object as `shared_ptr`
 template <class T, class ... Args>

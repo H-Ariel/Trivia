@@ -24,9 +24,9 @@ struct CreateRoomRequest;
 
 struct RoomData
 {
-	RoomData();
+	RoomData() = default;
 	RoomData(
-		string name,
+		const string& name,
 		unsigned int maxUsers,
 		unsigned int questionCount,
 		unsigned int answerTimeout
@@ -34,19 +34,19 @@ struct RoomData
 	RoomData(const CreateRoomRequest&);
 
 	string name;
-	unsigned int id;
-	unsigned int maxUsers;
-	unsigned int questionCount;
-	unsigned int answerTimeout; // in seconds
-	bool isActive;
-	bool hasGameStarted;
+	unsigned int id = -1;
+	unsigned int maxUsers = 0;
+	unsigned int questionCount = 0;
+	unsigned int answerTimeout = 0; // in seconds
+	bool isActive = false;
+	bool hasGameStarted = false;
 };
 
 
 struct Question
 {
-	Question() = default; // TODO
-	Question(string question, string correctAnswer, vector<string> wrongAnswers);
+	Question() = default;
+	Question(const string& question, const string& correctAnswer, const vector<string>& wrongAnswers);
 
 	string question;
 	string correctAnswer;
@@ -55,31 +55,25 @@ struct Question
 
 struct UserStatistics
 {
-	UserStatistics() : score(0) {}
-
 	string username;
-	float score;
+	float score = 0;
 };
 
 struct PlayerGameData
 {
-	PlayerGameData();
-
-	unsigned int currentQuestionId;
-	unsigned int correctAnswerCount;
-	unsigned int wrongAnswerCount;
-	float averangeAnswerTime;
-	bool isActive; // inactive player is a player who leaves the game in the middle
+	unsigned int currentQuestionId = 0;
+	unsigned int correctAnswerCount = 0;
+	unsigned int wrongAnswerCount = 0;
+	float averangeAnswerTime = 0;
+	bool isActive = true; // inactive player is a player who leaves the game in the middle
 };
 
 struct PlayerResults
 {
-	PlayerResults() : correctAnswerCount(0), wrongAnswerCount(0), averangeAnswerTime(0) {}
-
 	string username;
-	unsigned int correctAnswerCount;
-	unsigned int wrongAnswerCount; // TODO: maybe not needed because it's the same as "totalAnswersCount-correctAnswerCount"
-	float averangeAnswerTime;
+	unsigned int correctAnswerCount = 0;
+	unsigned int wrongAnswerCount = 0; // TODO: maybe not needed because it's the same as "totalAnswersCount-correctAnswerCount"
+	float averangeAnswerTime = 0;
 };
 
 
@@ -88,20 +82,23 @@ struct PlayerResults
 
 struct ErrorResponse
 {
-	ErrorResponse(string message) : message(message) {}
+	ErrorResponse(const string& message) 
+		: message(message) {}
 	const string message;
 };
 
 struct GetRoomsResponse
 {
-	GetRoomsResponse(vector<tuple<unsigned int, string>> rooms);
+	GetRoomsResponse(const vector<tuple<unsigned int, string>>& rooms)
+		: rooms(rooms) {}
 	vector<tuple<unsigned int, string>> rooms;
 };
 
 struct GetStatisticsResponse
 {
-	GetStatisticsResponse(vector<UserStatistics> highScore, UserStatistics userStat);
-	
+	GetStatisticsResponse(const vector<UserStatistics>& highScore, const UserStatistics& userStat)
+		: highScore(highScore), userStat(userStat) {}
+
 	vector<UserStatistics> highScore;
 	UserStatistics userStat;
 };
@@ -120,7 +117,7 @@ struct GetRoomStateResponse
 
 struct GetQuestionResponse
 {
-	GetQuestionResponse(Question);
+	GetQuestionResponse(const Question&);
 
 	string question;
 	vector<string> answers; // the first answer is the correct, the other are wrong
@@ -128,7 +125,8 @@ struct GetQuestionResponse
 
 struct GetGameResultsResponse
 {
-	GetGameResultsResponse(vector<PlayerResults> results);
+	GetGameResultsResponse(const vector<PlayerResults>& results)
+		: results(results) {}
 	vector<PlayerResults> results;
 };
 

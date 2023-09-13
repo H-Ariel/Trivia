@@ -21,5 +21,7 @@ public:
 	virtual unsigned int getGameId() = 0;
 	virtual void writeGameData(unsigned int id, unsigned int answerTimeout, unsigned int questionCount) = 0;
 
-	// TODO: add mutex here and use in sons
+	
+protected:
+	mutex _dbMutex;
 };

@@ -7,7 +7,7 @@ class Game
 {
 public:
 	Game() = default;
-	Game(vector<LoggedUser> users, vector<Question> questions);
+	Game(const vector<LoggedUser>& users, const vector<Question>& questions);
 
 	Question getQuestionForUser(const LoggedUser& user);
 	void submitAnswer(const LoggedUser& user, unsigned int answerId);

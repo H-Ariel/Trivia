@@ -1,16 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace TriviaClient
 {
@@ -23,45 +12,43 @@ namespace TriviaClient
 		{
 			InitializeComponent();
 
-			TriviaMessage.HandleMessage(
-				new TriviaMessage(TriviaMessage.MessageCodes.GetStatistics),
-				resp => {
+			TriviaMessage.HandleMessage(TriviaMessage.MessageCodes.GetStatistics, msg =>
+			{
+				GetStatisticsResponse statisticsResponse = GetStatisticsResponse.Parse(msg.Data);
 
-					GetStatisticsResponse statisticsResponse = GetStatisticsResponse.Parse(resp.Data);
+				statistics.Children.Add(new TextBlock()
+				{
+					Text = $"your score: {statisticsResponse.userStat.username} - {statisticsResponse.userStat.score}",
+					Width = 320,
+					FontSize = 28
+				});
 
+				statistics.Children.Add(new Separator()
+				{
+					Opacity = 0,
+					Height = 10,
+				});
+
+				if (statisticsResponse.highScore != null)
+				{
 					statistics.Children.Add(new TextBlock()
 					{
-						Text = $"your score: {statisticsResponse.userStat.username} - {statisticsResponse.userStat.score}",
+						Text = $"Top {statisticsResponse.highScore.Count}:",
 						Width = 320,
-						FontSize = 28
+						FontSize = 32
 					});
 
-					statistics.Children.Add(new Separator()
-					{
-						Opacity = 0,
-						Height = 10,
-					});
-
-					if (statisticsResponse.highScore != null)
+					foreach (UserStatistics uStat in statisticsResponse.highScore)
 					{
 						statistics.Children.Add(new TextBlock()
 						{
-							Text = $"Top {statisticsResponse.highScore.Count()}:",
+							Text = $"your score: {uStat.username} - {uStat.score}",
 							Width = 320,
-							FontSize = 32
+							FontSize = 28
 						});
-
-						foreach (UserStatistics uStat in statisticsResponse.highScore)
-						{
-							statistics.Children.Add(new TextBlock()
-							{
-								Text = $"your score: {uStat.username} - {uStat.score}",
-								Width = 320,
-								FontSize = 28
-							});
-						}
 					}
 				}
+			}
 			);
 		}
 

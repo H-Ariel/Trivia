@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Net.Sockets;
-using System.Windows.Controls;
-using System.Security.Cryptography;
 using System.IO;
+using System.Net.Sockets;
+using System.Text;
 
 namespace TriviaClient
 {
@@ -14,11 +9,8 @@ namespace TriviaClient
 	{
 		static readonly string SERVER_IP = "127.0.0.1";
 		static readonly int SERVER_PORT = 9568;
-
-
-		private static TcpClient? socket;
-		private static NetworkStream? stream;
-
+		static TcpClient? socket;
+		static NetworkStream? stream;
 
 		public static void Connect()
 		{
@@ -60,11 +52,10 @@ namespace TriviaClient
 		{
 			if (stream != null)
 			{
-				MemoryStream mem = new MemoryStream();
+				MemoryStream mem = new();
 				mem.WriteByte(msg.Code);
 				mem.Write(IntToBytes(msg.Data.Length));
 				mem.Write(Encoding.ASCII.GetBytes(msg.Data));
-
 				stream.Write(mem.ToArray());
 				stream.Flush();
 			}

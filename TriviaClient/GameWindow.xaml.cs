@@ -1,17 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace TriviaClient
 {
@@ -24,7 +14,6 @@ namespace TriviaClient
 		int currQuestionId;
 		bool newWndOpened;
 		Thread? timer;
-
 
 		public GameWindow(int questionCount, int answerTimeout)
 		{
@@ -80,7 +69,7 @@ namespace TriviaClient
 
 		void GetNewQuestions()
 		{
-			TriviaMessage.HandleMessage(new TriviaMessage(TriviaMessage.MessageCodes.GetQuestion), msg =>
+			TriviaMessage.HandleMessage(TriviaMessage.MessageCodes.GetQuestion, msg =>
 			{
 				this.Dispatcher.Invoke(() =>
 				{
@@ -141,7 +130,7 @@ namespace TriviaClient
 
 		void LeaveGame(object sender, RoutedEventArgs e)
 		{
-			TriviaMessage.HandleMessage(new TriviaMessage(TriviaMessage.MessageCodes.LeaveGame), () => WindowsHandler.ShowMainMenu(this));
+			TriviaMessage.HandleMessage(TriviaMessage.MessageCodes.LeaveGame, () => WindowsHandler.ShowMainMenu(this));
 		}
 	}
 }

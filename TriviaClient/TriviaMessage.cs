@@ -1,14 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Text.Json;
-using System.Windows.Interop;
 using System.Windows;
-using System.Numerics;
-using System.Runtime.Intrinsics;
 
 namespace TriviaClient
 {
@@ -79,6 +72,15 @@ namespace TriviaClient
 		static public void HandleMessage(TriviaMessage msgToServer, Action okCallback, bool handleErrors = true)
 		{
 			HandleMessage(msgToServer, TriviaMessage => okCallback?.Invoke(), handleErrors);
+		}
+
+		static public void HandleMessage(MessageCodes msgCode, ResponseOkCallback okCallback, bool handleErrors = true)
+		{
+			HandleMessage(new TriviaMessage(msgCode), okCallback, handleErrors);
+		}
+		static public void HandleMessage(MessageCodes msgCode, Action okCallback, bool handleErrors = true)
+		{
+			HandleMessage(new TriviaMessage(msgCode), okCallback, handleErrors);
 		}
 
 
@@ -183,7 +185,7 @@ namespace TriviaClient
 	{
 		static public ErrorResponse Parse(string data)
 		{
-			return JsonSerializer.Deserialize<ErrorResponse>(data); // TODO: use c'tor ?
+			return JsonSerializer.Deserialize<ErrorResponse>(data);
 		}
 
 		public string message { set; get; }

@@ -1,18 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Interop;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace TriviaClient
 {
@@ -35,12 +23,8 @@ namespace TriviaClient
 
 		void JoinTheRoom(object sender, RoutedEventArgs e)
 		{
-			int id = (int)((Button)sender).Tag;
-
-			TriviaMessage.HandleMessage(new TriviaMessage(new JoinRoomRequest(id)), () =>
-			{
-				WindowsHandler.ShowWindow(this, new Room());
-			});
+			TriviaMessage.HandleMessage(new TriviaMessage(new JoinRoomRequest((int)((Button)sender).Tag)),
+				() => WindowsHandler.ShowWindow(this, new Room()));
 		}
 
 
@@ -48,7 +32,7 @@ namespace TriviaClient
 		{
 			while (RunThread)
 			{
-				TriviaMessage.HandleMessage(new TriviaMessage(TriviaMessage.MessageCodes.GetRooms), msg =>
+				TriviaMessage.HandleMessage(TriviaMessage.MessageCodes.GetRooms, msg =>
 				{
 					this.Dispatcher.Invoke(() =>
 					{

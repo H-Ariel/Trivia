@@ -1,19 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Windows.Interop;
-using System.Xml.Linq;
 
 namespace TriviaClient
 {
@@ -46,16 +33,9 @@ namespace TriviaClient
 			}
 
 			TriviaMessage.HandleMessage(
-				new TriviaMessage(new CreateRoomRequest(
-					name.Text,
-					int.Parse(maxUsers.Text),
-					int.Parse(questionCount.Text),
-					int.Parse(answerTimeout.Text)
-					)),
-				() =>
-				{
-					WindowsHandler.ShowWindow(this, new Room(true));
-				});
+				new TriviaMessage(new CreateRoomRequest(name.Text, int.Parse(maxUsers.Text),
+				int.Parse(questionCount.Text), int.Parse(answerTimeout.Text))),
+				() => WindowsHandler.ShowWindow(this, new Room(true)));
 		}
 
 		void Cancel(object sender, RoutedEventArgs e)

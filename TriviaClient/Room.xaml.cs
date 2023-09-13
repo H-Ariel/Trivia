@@ -1,17 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace TriviaClient
 {
@@ -20,9 +9,8 @@ namespace TriviaClient
 	/// </summary>
 	public partial class Room : Window
 	{
-		bool RunThread;
 		readonly bool isAdmin;
-
+		bool RunThread;
 		int questionCount, answerTimeout;
 
 
@@ -48,12 +36,10 @@ namespace TriviaClient
 			{
 				MessageBoxResult result = MessageBox.Show("This action will cause the room to close.\nAre you sure?", "Warning", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
 				if (result == MessageBoxResult.Cancel)
-				{
 					return;
-				}
 			}
 
-			TriviaMessage.HandleMessage(new TriviaMessage(TriviaMessage.MessageCodes.LeaveRoom), () => WindowsHandler.ShowMainMenu(this));
+			TriviaMessage.HandleMessage(TriviaMessage.MessageCodes.LeaveRoom, () => WindowsHandler.ShowMainMenu(this));
 		}
 
 		void StartGame()
@@ -64,7 +50,7 @@ namespace TriviaClient
 		{
 			if (isAdmin)
 			{
-				TriviaMessage.HandleMessage(new TriviaMessage(TriviaMessage.MessageCodes.StartGame), () => StartGame());
+				TriviaMessage.HandleMessage(TriviaMessage.MessageCodes.StartGame, () => StartGame());
 			}
 			else
 			{
@@ -76,7 +62,7 @@ namespace TriviaClient
 		{
 			while (RunThread)
 			{
-				TriviaMessage.HandleMessage(new TriviaMessage(TriviaMessage.MessageCodes.GetRoomState), msg =>
+				TriviaMessage.HandleMessage(TriviaMessage.MessageCodes.GetRoomState, msg =>
 				{
 					this.Dispatcher.Invoke(() =>
 					{
@@ -91,13 +77,11 @@ namespace TriviaClient
 						PlayersList.Children.Clear();
 						foreach (string name in resp.players)
 						{
-							TextBlock btn = new()
+							PlayersList.Children.Add(new TextBlock()
 							{
 								Text = name,
 								FontSize = 25
-							};
-
-							PlayersList.Children.Add(btn);
+							});
 						}
 
 						if (!resp.isActive)

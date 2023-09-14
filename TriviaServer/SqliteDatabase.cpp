@@ -83,14 +83,14 @@ void SqliteDatabase::addNewUser(const string& username, const string& password, 
 	runSqlStatements(format("INSERT INTO USERS VALUES(\"{}\",\"{}\",\"{}\");", username, password, email));
 }
 
-unsigned int SqliteDatabase::getMaxQuestionsCount()
+int SqliteDatabase::getMaxQuestionsCount()
 {
-	unsigned int count = 0;
+	int count = 0;
 	runSqlStatements("SELECT COUNT(*) FROM QUESTIONS;", GetInt, &count);
 	return count;
 }
 
-vector<Question> SqliteDatabase::getQuestions(unsigned int n)
+vector<Question> SqliteDatabase::getQuestions(int n)
 {
 	vector<Question> questions;
 	runSqlStatements(format("SELECT * FROM QUESTIONS WHERE id <= {};", n), GetQuestions, &questions);
@@ -105,7 +105,7 @@ void SqliteDatabase::addQuestion(const Question& question)
 		question.wrongAnswers[1], question.wrongAnswers[2]));
 }
 
-void SqliteDatabase::addStatistics(const string& username, unsigned int gameId, float score)
+void SqliteDatabase::addStatistics(const string& username, int gameId, float score)
 {
 	runSqlStatements(format("INSERT INTO STATISTICS VALUES({}, \"{}\", {} );", gameId, username, score));
 }
@@ -125,14 +125,14 @@ vector<UserStatistics> SqliteDatabase::getHighScore(int n)
 	return stats;
 }
 
-unsigned int SqliteDatabase::getGameId()
+int SqliteDatabase::getGameId()
 {
-	unsigned int id = 0;
+	int id = 0;
 	runSqlStatements("SELECT MAX(id) FROM GAMES;", GetInt, &id);
 	return id + 1; // get next id
 }
 
-void SqliteDatabase::writeGameData(unsigned int id, unsigned int answerTimeout, unsigned int questionCount)
+void SqliteDatabase::writeGameData(int id, int answerTimeout, int questionCount)
 {
 	char str[256] = {};
 	sprintf(str, "INSERT INTO GAMES VALUES(%d, %d, %d);", id, answerTimeout, questionCount);
@@ -179,7 +179,7 @@ int SqliteDatabase::GetQuestions(void* data, int argc, char** argv, char** azCol
 int SqliteDatabase::GetInt(void* data, int argc, char** argv, char** azColName)
 {
 	if (data && argc == 1 && argv[0])
-		*((unsigned int*)data) = stoi(argv[0]);
+		*((int*)data) = stoi(argv[0]);
 	return 0;
 }
 int SqliteDatabase::GetUserScore(void* data, int argc, char** argv, char** azColName)

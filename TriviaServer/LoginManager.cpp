@@ -6,7 +6,7 @@ LoginManager::LoginManager(IDatabase* database)
 {
 }
 
-const LoggedUser& LoginManager::login(int id, string username, string password)
+LoggedUser LoginManager::login(int id, string username, string password)
 {
 	LoggedUser newUser(id, username);
 
@@ -21,7 +21,7 @@ const LoggedUser& LoginManager::login(int id, string username, string password)
 	return _loggedUsers.back();
 }
 
-const LoggedUser& LoginManager::signup(int id, string username, string password, string email)
+LoggedUser LoginManager::signup(int id, string username, string password, string email)
 {
 	if (_database->doesUserExist(username))
 		throw Exception("username already exists");

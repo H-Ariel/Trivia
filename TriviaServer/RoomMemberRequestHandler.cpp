@@ -2,7 +2,7 @@
 #include "PacketSerializer.h"
 
 
-RoomMemberRequestHandler::RoomMemberRequestHandler(RequestHandlerFactory* handlerFactory, const LoggedUser& user, unsigned int roomId)
+RoomMemberRequestHandler::RoomMemberRequestHandler(RequestHandlerFactory* handlerFactory, const LoggedUser& user, int roomId)
 	: _user(user), _handlerFactory(handlerFactory), _roomId(roomId)
 {
 }
@@ -52,7 +52,7 @@ RequestResult RoomMemberRequestHandler::leaveRoom()
 }
 
 
-RoomAdminRequestHandler::RoomAdminRequestHandler(RequestHandlerFactory* handlerFactory, const LoggedUser& user, unsigned int roomId)
+RoomAdminRequestHandler::RoomAdminRequestHandler(RequestHandlerFactory* handlerFactory, const LoggedUser& user, int roomId)
 	: RoomMemberRequestHandler(handlerFactory, user, roomId)
 {
 }

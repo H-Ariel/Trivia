@@ -17,7 +17,7 @@ Question Game::getQuestionForUser(const LoggedUser& user)
 	return questions[players[user].currentQuestionId];
 }
 
-void Game::submitAnswer(const LoggedUser& user, unsigned int answerId)
+void Game::submitAnswer(const LoggedUser& user, int answerId)
 {
 	float duration = chrono::duration_cast<chrono::milliseconds>(chrono::system_clock::now() - players[user].timeGetQuestion).count() / 1000.f;
 
@@ -46,7 +46,7 @@ vector<UserStatistics> Game::getGameResults() const
 	for (const auto& i : players)
 	{
 		if (i.second.isActive) // if the player inactive we ignore him
-			if (i.second.currentQuestionId < (unsigned int)questions.size()) // player not answer all questions
+			if (i.second.currentQuestionId < (int)questions.size()) // player not answer all questions
 				throw Exception("Not all players finished the game");
 	}
 

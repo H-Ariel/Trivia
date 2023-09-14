@@ -26,17 +26,17 @@ struct RoomData
 {
 	RoomData(
 		const string& name = "",
-		unsigned int maxUsers = 0,
-		unsigned int questionCount = 0,
-		unsigned int answerTimeout = 0
+		int maxUsers = 0,
+		int questionCount = 0,
+		int answerTimeout = 0
 	);
 	RoomData(const CreateRoomRequest&);
 
 	string name;
-	unsigned int id = -1;
-	unsigned int maxUsers = 0;
-	unsigned int questionCount = 0;
-	unsigned int answerTimeout = 0; // in seconds
+	int id = -1;
+	int maxUsers = 0;
+	int questionCount = 0;
+	int answerTimeout = 0; // in seconds
 	bool isActive = false;
 	bool hasGameStarted = false;
 };
@@ -63,8 +63,8 @@ struct UserStatistics
 struct PlayerGameData
 {
 	chrono::system_clock::time_point timeGetQuestion; // save current time when get question for calculate the averange answer time
-	unsigned int currentQuestionId = 0;
-	unsigned int correctAnswerCount = 0;
+	int currentQuestionId = 0;
+	int correctAnswerCount = 0;
 	float averangeAnswerTime = 0;
 	bool isActive = true; // inactive player is a player who leaves the game in the middle
 };
@@ -81,9 +81,9 @@ struct ErrorResponse
 
 struct GetRoomsResponse
 {
-	GetRoomsResponse(const map<unsigned int, string>& rooms)
+	GetRoomsResponse(const map<int, string>& rooms)
 		: rooms(rooms) {}
-	map<unsigned int, string> rooms;
+	map<int, string> rooms;
 };
 
 struct GetStatisticsResponse
@@ -101,8 +101,8 @@ struct GetRoomStateResponse
 
 	string name;
 	vector<string> players;
-	unsigned int questionCount;
-	unsigned int answerTimeout;
+	int questionCount;
+	int answerTimeout;
 	bool isActive;
 	bool hasGameStarted;
 };
@@ -141,16 +141,16 @@ struct SignupRequest
 struct CreateRoomRequest
 {
 	string roomName;
-	unsigned int maxUsers;
-	unsigned int questionCount;
-	unsigned int answerTimeout;
+	int maxUsers;
+	int questionCount;
+	int answerTimeout;
 };
 struct JoinRoomRequest
 {
-	unsigned int roomId;
+	int roomId;
 };
 
 struct SubmitAnswerRequest
 {
-	unsigned int answerId;
+	int answerId;
 };

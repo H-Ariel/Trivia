@@ -7,7 +7,7 @@
 class GameRequestHandler : public IRequestHandler
 {
 public:
-	GameRequestHandler(RequestHandlerFactory* handlerFactory, const LoggedUser& user, unsigned int gameId);
+	GameRequestHandler(RequestHandlerFactory* handlerFactory, const LoggedUser& user, int gameId);
 	RequestResult handleRequest(const RequestInfo& reqInfo) override;
 
 private:
@@ -18,5 +18,5 @@ private:
 
 	const LoggedUser _user;
 	RequestHandlerFactory* _handlerFactory;
-	const unsigned int _gameId;
+	const int _gameId;
 };

@@ -1,7 +1,7 @@
 #include "structures.h"
 
 
-RoomData::RoomData(const string& name, unsigned int maxUsers, unsigned int questionCount, unsigned int answerTimeout)
+RoomData::RoomData(const string& name, int maxUsers, int questionCount, int answerTimeout)
 	: name(name), maxUsers(maxUsers), questionCount(questionCount), answerTimeout(answerTimeout)
 {
 }

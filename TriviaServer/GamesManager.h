@@ -11,17 +11,17 @@ public:
 	GamesManager(IDatabase* database);
 
 	void createGame(const RoomData& roomData, const vector<LoggedUser>& users);
-	void removePlayerFromGame(unsigned int gameId, const LoggedUser& user);
-	Question getQuestionForUser(unsigned int gameId, const LoggedUser& user);
-	bool hasMoreQuestions(unsigned int gameId, const LoggedUser& user) const;
-	void submitAnswer(unsigned int gameId, const LoggedUser& user, unsigned int answerId);
-	vector<UserStatistics> getGameResults(unsigned int gameId) const;
+	void removePlayerFromGame(int gameId, const LoggedUser& user);
+	Question getQuestionForUser(int gameId, const LoggedUser& user);
+	bool hasMoreQuestions(int gameId, const LoggedUser& user) const;
+	void submitAnswer(int gameId, const LoggedUser& user, int answerId);
+	vector<UserStatistics> getGameResults(int gameId) const;
 
 
 private:
-	void deleteGame(unsigned int gameId);
-	void checkIfExists(unsigned int gameId) const;
+	void deleteGame(int gameId);
+	void checkIfExists(int gameId) const;
 
-	map<unsigned int, shared_ptr<Game>> _games; // [id]=game (the game ID is same to the room ID)
+	map<int, shared_ptr<Game>> _games; // [id]=game (the game ID is same to the room ID)
 	IDatabase* const _database;
 };

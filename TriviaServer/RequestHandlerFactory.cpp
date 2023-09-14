@@ -20,17 +20,17 @@ shared_ptr<IRequestHandler> RequestHandlerFactory::createMenuRequestHandler(cons
 	return shared_ptr<IRequestHandler>(DBG_NEW MenuRequestHandler(this, user));
 }
 
-shared_ptr<IRequestHandler> RequestHandlerFactory::createRoomMemberRequestHandler(const LoggedUser& user, unsigned int roomId)
+shared_ptr<IRequestHandler> RequestHandlerFactory::createRoomMemberRequestHandler(const LoggedUser& user, int roomId)
 {
 	return shared_ptr<IRequestHandler>(DBG_NEW RoomMemberRequestHandler(this, user, roomId));
 }
 
-shared_ptr<IRequestHandler> RequestHandlerFactory::createRoomAdminRequestHandler(const LoggedUser& user, unsigned int roomId)
+shared_ptr<IRequestHandler> RequestHandlerFactory::createRoomAdminRequestHandler(const LoggedUser& user, int roomId)
 {
 	return shared_ptr<IRequestHandler>(DBG_NEW RoomAdminRequestHandler(this, user, roomId));
 }
 
-shared_ptr<IRequestHandler> RequestHandlerFactory::createGameRequestHandler(const LoggedUser& user, unsigned int gameId)
+shared_ptr<IRequestHandler> RequestHandlerFactory::createGameRequestHandler(const LoggedUser& user, int gameId)
 {
 	return shared_ptr<IRequestHandler>(DBG_NEW GameRequestHandler(this, user, gameId));
 }

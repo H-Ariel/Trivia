@@ -37,7 +37,7 @@ RequestResult MenuRequestHandler::getRooms()
 }
 RequestResult MenuRequestHandler::joinRoom(const RequestInfo& reqInfo)
 {
-	unsigned int id = RequestPacketDeserializer::deserializeJoinRoomRequest(reqInfo).roomId;
+	int id = RequestPacketDeserializer::deserializeJoinRoomRequest(reqInfo).roomId;
 	_handlerFactory->getRoomsManager().addUserToRoom(_user, id);
 	return RequestResult(ResponsePacketSerializer::serializeOkResponse(),
 		_handlerFactory->createRoomMemberRequestHandler(_user, id));

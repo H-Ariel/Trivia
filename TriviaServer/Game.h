@@ -10,7 +10,7 @@ public:
 	Game(const vector<LoggedUser>& users, const vector<Question>& questions);
 
 	Question getQuestionForUser(const LoggedUser& user);
-	void submitAnswer(const LoggedUser& user, unsigned int answerId);
+	void submitAnswer(const LoggedUser& user, int answerId);
 	void removePlayer(const LoggedUser& user);
 
 	bool hasMoreQuestions(const LoggedUser& user) const;

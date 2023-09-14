@@ -16,16 +16,16 @@ public:
 	bool doesPasswordMatch(const string& username, const string& password) override;
 	void addNewUser(const string& username, const string& password, const string& email) override;
 
-	unsigned int getMaxQuestionsCount() override;
-	vector<Question> getQuestions(unsigned int n) override;
+	int getMaxQuestionsCount() override;
+	vector<Question> getQuestions(int n) override;
 	void addQuestion(const Question& question) override;
 
-	void addStatistics(const string& username, unsigned int gameId, float score) override;
+	void addStatistics(const string& username, int gameId, float score) override;
 	UserStatistics getUserStatistics(const string& username) override;
 	vector<UserStatistics> getHighScore(int n) override;
 
-	unsigned int getGameId() override;
-	void writeGameData(unsigned int id, unsigned int answerTimeout, unsigned int questionCount) override;
+	int getGameId() override;
+	void writeGameData(int id, int answerTimeout, int questionCount) override;
 
 private:
 	sqlite3* _db;

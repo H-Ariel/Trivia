@@ -7,7 +7,7 @@
 class RoomMemberRequestHandler : public IRequestHandler
 {
 public:
-	RoomMemberRequestHandler(RequestHandlerFactory* handlerFactory, const LoggedUser& user, unsigned int roomId);
+	RoomMemberRequestHandler(RequestHandlerFactory* handlerFactory, const LoggedUser& user, int roomId);
 	RequestResult handleRequest(const RequestInfo&) override;
 
 protected:
@@ -16,7 +16,7 @@ protected:
 
 	const LoggedUser _user;
 	RequestHandlerFactory* _handlerFactory;
-	const unsigned int _roomId;
+	const int _roomId;
 };
 
 
@@ -24,11 +24,10 @@ protected:
 class RoomAdminRequestHandler : public RoomMemberRequestHandler
 {
 public:
-	RoomAdminRequestHandler(RequestHandlerFactory* handlerFactory, const LoggedUser& user, unsigned int roomId);
+	RoomAdminRequestHandler(RequestHandlerFactory* handlerFactory, const LoggedUser& user, int roomId);
 	RequestResult handleRequest(const RequestInfo&) override;
 
 private:
 	RequestResult leaveRoom() override;
 	RequestResult startGame();
-
 };

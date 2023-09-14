@@ -12,13 +12,13 @@ void GamesManager::createGame(const RoomData& roomData, const vector<LoggedUser>
 	_games[roomData.id] = allocNewSharedPtr<Game>(users, _database->getQuestions(roomData.questionCount));
 }
 
-void GamesManager::deleteGame(unsigned int gameId)
+void GamesManager::deleteGame(int gameId)
 {
 	checkIfExists(gameId);
 	_games.erase(gameId);
 }
 
-void GamesManager::removePlayerFromGame(unsigned int gameId, const LoggedUser& user)
+void GamesManager::removePlayerFromGame(int gameId, const LoggedUser& user)
 {
 	checkIfExists(gameId);
 
@@ -27,25 +27,25 @@ void GamesManager::removePlayerFromGame(unsigned int gameId, const LoggedUser& u
 		deleteGame(gameId);
 }
 
-Question GamesManager::getQuestionForUser(unsigned int gameId, const LoggedUser& user)
+Question GamesManager::getQuestionForUser(int gameId, const LoggedUser& user)
 {
 	checkIfExists(gameId);
 	return _games[gameId]->getQuestionForUser(user);
 }
 
-bool GamesManager::hasMoreQuestions(unsigned int gameId, const LoggedUser& user) const
+bool GamesManager::hasMoreQuestions(int gameId, const LoggedUser& user) const
 {
 	checkIfExists(gameId);
 	return _games.at(gameId)->hasMoreQuestions(user);
 }
 
-void GamesManager::submitAnswer(unsigned int gameId, const LoggedUser& user, unsigned int answerId)
+void GamesManager::submitAnswer(int gameId, const LoggedUser& user, int answerId)
 {
 	checkIfExists(gameId);
 	_games[gameId]->submitAnswer(user, answerId);
 }
 
-vector<UserStatistics> GamesManager::getGameResults(unsigned int gameId) const
+vector<UserStatistics> GamesManager::getGameResults(int gameId) const
 {
 	checkIfExists(gameId);
 	vector<UserStatistics> results = _games.at(gameId)->getGameResults();
@@ -53,7 +53,7 @@ vector<UserStatistics> GamesManager::getGameResults(unsigned int gameId) const
 	return results;
 }
 
-void GamesManager::checkIfExists(unsigned int gameId) const
+void GamesManager::checkIfExists(int gameId) const
 {
 	if (_games.count(gameId) == 0)
 		throw Exception("game does not exists. (id = " + to_string(gameId));

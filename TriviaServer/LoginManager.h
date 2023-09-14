@@ -9,8 +9,8 @@ class LoginManager
 public:
 	LoginManager(IDatabase* database);
 
-	const LoggedUser& login(int id, string username, string password);
-	const LoggedUser& signup(int id, string username, string password, string email);
+	LoggedUser login(int id, string username, string password);
+	LoggedUser signup(int id, string username, string password, string email);
 	void logout(const LoggedUser& user);
 	void disconnectUser(int id);
 

@@ -2,7 +2,7 @@
 #include "PacketSerializer.h"
 
 
-GameRequestHandler::GameRequestHandler(RequestHandlerFactory* handlerFactory, const LoggedUser& user, unsigned int gameId)
+GameRequestHandler::GameRequestHandler(RequestHandlerFactory* handlerFactory, const LoggedUser& user, int gameId)
 	: _user(user), _gameId(gameId), _handlerFactory(handlerFactory)
 {
 }

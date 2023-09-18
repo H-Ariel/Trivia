@@ -147,7 +147,7 @@
     <ClCompile Include="StatisticsManager.cpp" />
     <ClCompile Include="structures.cpp" />
     <ClCompile Include="TriviaServer.cpp" />
-    <ClCompile Include="WSAInitializer.cpp" />
+    <ClCompile Include="WindowsSocket.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Communicator.h" />
@@ -158,6 +158,7 @@
     <ClInclude Include="GeneralLibrary.h" />
     <ClInclude Include="IDatabase.h" />
     <ClInclude Include="IRequestHandler.h" />
+    <ClInclude Include="ISocket.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="LoggedUser.h" />
     <ClInclude Include="LoginManager.h" />
@@ -174,7 +175,7 @@
     <ClInclude Include="StatisticsManager.h" />
     <ClInclude Include="structures.h" />
     <ClInclude Include="TriviaServer.h" />
-    <ClInclude Include="WSAInitializer.h" />
+    <ClInclude Include="WindowsSocket.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

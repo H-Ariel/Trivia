@@ -14,7 +14,7 @@ class RequestHandlerFactory
 public:
 	RequestHandlerFactory(IDatabase* database);
 
-	shared_ptr<IRequestHandler> createLoginRequestHandler(int id); // connect socket (id) to LoggedUser
+	shared_ptr<IRequestHandler> createLoginRequestHandler(void* key); // add id to LoggedUser
 	shared_ptr<IRequestHandler> createMenuRequestHandler(const LoggedUser& user);
 	shared_ptr<IRequestHandler> createRoomMemberRequestHandler(const LoggedUser& user, int roomId);
 	shared_ptr<IRequestHandler> createRoomAdminRequestHandler(const LoggedUser& user, int roomId);

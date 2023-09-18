@@ -16,7 +16,7 @@ public:
 
 private:
 	void startHandleRequests();
-	void handleNewClient(SOCKET);
+	void handleNewClient(shared_ptr<ISocket>);
 	void getCommands();
 
 

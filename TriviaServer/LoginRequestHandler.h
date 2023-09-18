@@ -7,7 +7,7 @@
 class LoginRequestHandler : public IRequestHandler
 {
 public:
-	LoginRequestHandler(RequestHandlerFactory* handlerFactory, int id);
+	LoginRequestHandler(RequestHandlerFactory* handlerFactory, void* _key);
 
 	RequestResult handleRequest(const RequestInfo&) override;
 	
@@ -16,5 +16,5 @@ private:
 	RequestResult signup(const RequestInfo&);
 
 	RequestHandlerFactory* _handlerFactory;
-	int _id;
+	void* _key; // special key for the user
 };

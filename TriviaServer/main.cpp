@@ -1,5 +1,4 @@
 #include "TriviaServer.h"
-#include "WSAInitializer.h"
 
 
 int main()
@@ -10,7 +9,6 @@ int main()
 
 	try
 	{
-		WSAInitializer WSAInitializer;
 		TriviaServer(9568).run();
 	}
 	catch (const Exception& e)

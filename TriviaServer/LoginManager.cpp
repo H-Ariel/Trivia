@@ -6,9 +6,9 @@ LoginManager::LoginManager(IDatabase* database)
 {
 }
 
-LoggedUser LoginManager::login(int id, string username, string password)
+LoggedUser LoginManager::login(void* key, string username, string password)
 {
-	LoggedUser newUser(id, username);
+	LoggedUser newUser(key, username);
 
 	if (!_database->doesUserExist(username))
 		throw Exception("username does not exists");
@@ -21,13 +21,13 @@ LoggedUser LoginManager::login(int id, string username, string password)
 	return _loggedUsers.back();
 }
 
-LoggedUser LoginManager::signup(int id, string username, string password, string email)
+LoggedUser LoginManager::signup(void* key, string username, string password, string email)
 {
 	if (_database->doesUserExist(username))
 		throw Exception("username already exists");
 
 	_database->addNewUser(username, password, email);
-	return login(id, username, password);
+	return login(key, username, password);
 }
 
 void LoginManager::logout(const LoggedUser& user)
@@ -37,9 +37,9 @@ void LoginManager::logout(const LoggedUser& user)
 		_loggedUsers.erase(it);
 }
 
-void LoginManager::disconnectUser(int id)
+void LoginManager::disconnectUser(void* key)
 {
-	auto it = find(_loggedUsers.begin(), _loggedUsers.end(), id);
+	auto it = find(_loggedUsers.begin(), _loggedUsers.end(), key);
 	if (it != _loggedUsers.end())
 		_loggedUsers.erase(it);
 }

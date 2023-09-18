@@ -6,16 +6,16 @@
 class LoggedUser
 {
 public:
-	LoggedUser(int id, string username);
+	LoggedUser(void* key, string username);
 
 	string getUsername() const { return _username; }
-	SOCKET getSocket() const { return _id; }
+	void* getKey() const { return _key; }
 
 	bool operator==(const LoggedUser&) const;
-	bool operator==(int id) const;
+	bool operator==(void* key) const;
 	bool operator<(const LoggedUser&) const;
 
 private:
 	string _username;
-	int _id; // this is an id for logged user
+	void* _key; // this is an id for logged user
 };

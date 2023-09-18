@@ -10,9 +10,9 @@ RequestHandlerFactory::RequestHandlerFactory(IDatabase* database)
 {
 }
 
-shared_ptr<IRequestHandler> RequestHandlerFactory::createLoginRequestHandler(int id)
+shared_ptr<IRequestHandler> RequestHandlerFactory::createLoginRequestHandler(void* key)
 {
-	return shared_ptr<IRequestHandler>(DBG_NEW LoginRequestHandler(this, id));
+	return shared_ptr<IRequestHandler>(DBG_NEW LoginRequestHandler(this, key));
 }
 
 shared_ptr<IRequestHandler> RequestHandlerFactory::createMenuRequestHandler(const LoggedUser& user)

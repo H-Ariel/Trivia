@@ -15,9 +15,6 @@
 #endif
 
 
-#include <WinSock2.h>
-#include <Windows.h>
-
 #include <iostream>
 #include <map>
 #include <thread>
@@ -28,7 +25,6 @@
 #include "structures.h"
 #include "Exception.hpp"
 
-#pragma comment (lib, "ws2_32.lib")
 
 #define FIND_IN_ARRAY(arr, val) (find(begin(arr), end(arr), val) != end(arr))
 

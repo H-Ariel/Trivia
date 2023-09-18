@@ -1,8 +1,8 @@
 #include "LoggedUser.h"
 
 
-LoggedUser::LoggedUser(int id, string username)
-	: _username(username), _id(id)
+LoggedUser::LoggedUser(void* key, string username)
+	: _username(username), _key(key)
 {
 }
 
@@ -11,9 +11,9 @@ bool LoggedUser::operator==(const LoggedUser& u) const
 	return _username == u._username;
 }
 
-bool LoggedUser::operator==(int id) const
+bool LoggedUser::operator==(void* key) const
 {
-	return _id == id;
+	return _key == key;
 }
 
 bool LoggedUser::operator<(const LoggedUser& u) const

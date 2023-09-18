@@ -25,26 +25,24 @@ void TriviaServer::run()
 
 void TriviaServer::startHandleRequests()
 {
-	SOCKET clientSock;
+	shared_ptr<ISocket> clientSock;
 	while (_isRunning)
 	{
 		cout << "Waiting for client connection request" << endl;
 
 		clientSock = _communicator.accept();
-		if (clientSock != INVALID_SOCKET)
-		{
+		if (clientSock != nullptr)
 			thread(&TriviaServer::handleNewClient, this, clientSock).detach();
-		}
 	}
 }
 
-void TriviaServer::handleNewClient(SOCKET clientSock)
+void TriviaServer::handleNewClient(shared_ptr<ISocket> clientSock)
 {
 	cout << "start handle client. sock=" << clientSock << endl;
 
 	RequestInfo reqInfo;
 	RequestResult result;
-	shared_ptr<IRequestHandler> handler = _handlerFactory->createLoginRequestHandler((int)clientSock);
+	shared_ptr<IRequestHandler> handler = _handlerFactory->createLoginRequestHandler(clientSock.get());
 	bool handleClient = true;
 
 	try
@@ -81,10 +79,10 @@ void TriviaServer::handleNewClient(SOCKET clientSock)
 	catch (const Exception& e)
 	{
 		cout << "error in sock " << clientSock << ": " << e.what() << endl;
-		_handlerFactory->getLoginManager().disconnectUser((int)clientSock);
+		_handlerFactory->getLoginManager().disconnectUser(clientSock.get());
 	}
 
-	closesocket(clientSock);
+	clientSock->close();
 
 	cout << "stop handle client. sock=" << clientSock << endl;
 }
